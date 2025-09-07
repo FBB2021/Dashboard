@@ -14,4 +14,7 @@ export interface UserResponse {
 
   /** Timestamp when the user account was created */
   createdAt: Date;
+  
+  /** DEV ONLY: Return password to see if password is encrypted */
+  password: string;
 }
