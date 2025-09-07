@@ -1,31 +1,33 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiHandler } from "next";
 import { createUser, getUsers } from "@/services/user.service";
 import { CreateUserDto } from "@/dtos/request_dtos/user.dto";
 import { UserResponse } from "@/dtos/response_dtos/user.response.dto";
+import { success, error } from "@/utils/response";
 
 /**
  * Handles requests for the /api/users endpoint.
  * - GET: Fetch all users
  * - POST: Create a new user
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<UserResponse[] | UserResponse | { error: string }>
-) {
+const handler: NextApiHandler = async (req, res) => {
   try {
     if (req.method === "GET") {
       const users = await getUsers();
-      return res.status(200).json(users);
+      res.status(200).json(success<UserResponse[]>(users));
+      return;
     }
 
     if (req.method === "POST") {
       const body: CreateUserDto = req.body;
       const user = await createUser(body);
-      return res.status(201).json(user);
+      res.status(201).json(success<UserResponse>(user, "User created"));
+      return;
     }
 
-    return res.status(405).json({ error: "Method not allowed" });
+    res.status(405).json(error("Method not allowed", 405));
   } catch (err: any) {
-    return res.status(500).json({ error: err.message });
+    res.status(500).json(error(err.message, 500));
   }
-}
+};
+
+export default handler;
