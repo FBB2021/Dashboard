@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getUsers, createUser } from "@/services/user.service";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
+import { withAuth } from "@/common/auth/withAuth";
+import { withRole } from "@/common/auth/authorize";
 
 /**
  * Handles requests for the /api/users endpoint.
@@ -20,4 +22,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   throw new AppError("Method not allowed", 405);
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(withAuth(withRole("ADMIN")(handler)));

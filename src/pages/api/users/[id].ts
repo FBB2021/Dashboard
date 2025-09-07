@@ -3,6 +3,8 @@ import { getUserById, updateUser, deleteUser } from "@/services/user.service";
 import { UpdateUserDto } from "@/dtos/request_dtos/user.dto";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
+import { withAuth } from "@/common/auth/withAuth";
+import { withRole } from "@/common/auth/authorize";
 /**
  * Handles requests for the /api/users/[id] endpoint.
  * - GET: Fetch a user by ID
@@ -45,4 +47,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   throw new AppError("Method not allowed", 405);
 }
 
-export default withErrorHandling(handler);
+export default withErrorHandling(withAuth(withRole("ADMIN")(handler)));

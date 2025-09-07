@@ -15,9 +15,81 @@ datasource db {
 // =====================
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email String @unique
-  username String @unique
-  password String
+  /// Primary key - unique identifier for each user
+  id        Int      @id @default(autoincrement())
+
+  /// Unique username used for login / identification
+  username  String   @unique
+
+  /// Unique email address of the user
+  email     String   @unique
+
+  /// Hashed password for authentication (never store plain text)
+  password  String
+
+  /// Foreign key reference to the Role assigned to this user
+  roleId    Int
+
+  /// Relation: each user belongs to exactly one role
+  role      Role     @relation(fields: [roleId], references: [id])
+
+  /// Timestamp when the user was created
   createdAt DateTime @default(now())
+}
+
+// =====================
+// Role Entity
+// =====================
+
+model Role {
+  /// Primary key - unique identifier for each role
+  id          Int              @id @default(autoincrement())
+
+  /// Name of the role (e.g., ADMIN, USER, MANAGER)
+  name        String           @unique
+
+  /// Relation: a role can have many permissions through RolePermission
+  permissions RolePermission[]
+
+  /// Relation: a role can be assigned to many users
+  users       User[]
+}
+
+// =====================
+// Permission Entity
+// =====================
+
+model Permission {
+  /// Primary key - unique identifier for each permission
+  id          Int              @id @default(autoincrement())
+
+  /// Permission name (e.g., USER:READ, USER:WRITE, POST:DELETE)
+  name        String           @unique
+
+  /// Optional description of the permission for documentation
+  description String?
+
+  /// Relation: a permission can belong to many roles through RolePermission
+  roles       RolePermission[]
+}
+
+// =====================
+// RolePermission Entity
+// =====================
+
+model RolePermission {
+  /// Foreign key reference to Role
+  roleId       Int
+
+  /// Foreign key reference to Permission
+  permissionId Int
+
+  /// Relation: connects to the Role entity
+  role         Role        @relation(fields: [roleId], references: [id])
+
+  /// Relation: connects to the Permission entity
+  permission   Permission  @relation(fields: [permissionId], references: [id])
+
+  /// Composite primary key - ensures a unique role-permission pair
+  @@id([roleId, permissionId]) 
 }

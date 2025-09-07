@@ -11,6 +11,11 @@ export interface CreateUserDto {
 
   /** Password for account authentication */
   password: string;
+
+  /**
+   * Optional: if omitted, service should assign the default role.
+   */
+  roleId?: number;
 }
 
 /**
@@ -26,4 +31,7 @@ export interface UpdateUserDto {
 
   /** New password for the user (optional) */
   password?: string;
+
+  /** RoleId for the user (optional) */
+  roleId?: number;
 }

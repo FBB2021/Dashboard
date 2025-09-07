@@ -1,3 +1,4 @@
+import { RoleResponse } from "./role.response.dto";
 /**
  * DTO for returning user information to the client.
  * Excludes sensitive fields like password.
@@ -15,6 +16,13 @@ export interface UserResponse {
   /** Timestamp when the user account was created */
   createdAt: Date;
   
-  /** DEV ONLY: Return password to see if password is encrypted */
-  password: string;
+  /** Role of user */
+  role: { id: number; name: string };
+}
+
+export interface UserDetailResponse extends Omit<UserResponse, "role"> {
+  /**
+   * Full role data with permissions when needed.
+   */
+  role: RoleResponse;
 }
