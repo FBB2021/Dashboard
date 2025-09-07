@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { CreateUserDto, UpdateUserDto } from "@/dtos/request_dtos/user.dto";
 import { UserResponse } from "@/dtos/response_dtos/user.response.dto";
+import { User } from "@prisma/client";
 
 /**
  * Create a new user
@@ -47,7 +48,7 @@ export async function deleteUser(id: number): Promise<void> {
 /**
  * Helper: Convert DB User -> Response DTO
  */
-function toUserResponse(user: any): UserResponse {
+function toUserResponse(user: User): UserResponse {
   return {
     id: user.id,
     username: user.username,

@@ -24,9 +24,14 @@ const handler: NextApiHandler = async (req, res) => {
       return;
     }
 
+    res.setHeader("Allow", ["GET", "POST"]);
     res.status(405).json(error("Method not allowed", 405));
-  } catch (err: any) {
-    res.status(500).json(error(err.message, 500));
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).json(error(err.message, 500));
+    } else {
+      res.status(500).json(error("Unknown error", 500));
+    }
   }
 };
 

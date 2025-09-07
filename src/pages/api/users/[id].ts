@@ -12,55 +12,43 @@ import { success, error } from "@/utils/response";
  */
 const handler: NextApiHandler = async (req, res) => {
   const { id } = req.query;
+  if (!id || Array.isArray(id)) {
+    res.status(400).json(error("Invalid user id", 400));
+    return;
+  }
 
-  try {
-    if (!id || Array.isArray(id)) {
-      res.status(400).json(error("Invalid user id", 400));
-      return;
-    }
-
-    const userId = Number(id);
-
-    if (req.method === "GET") {
-      const user = await getUserById(userId);
-      if (!user) {
-        res.status(404).json(error("User not found", 404));
-        return;
-      }
-      res.status(200).json(success<UserResponse>(user));
-      return;
-    }
-
-    if (req.method === "PUT") {
-      const body: UpdateUserDto = req.body;
-
-      const existing = await getUserById(userId);
-      if (!existing) {
-        res.status(404).json(error("User not found", 404));
-        return;
-      }
-
-      const user = await updateUser(userId, body);
-      res.status(200).json(success<UserResponse>(user, "User updated"));
-      return;
-    }
-
-    if (req.method === "DELETE") {
-      const existing = await getUserById(userId);
-      if (!existing) {
-        res.status(404).json(error("User not found", 404));
-        return;
-      }
-
-      await deleteUser(userId);
+  const userId = Number(id);
+  const user = await getUserById(userId);
+  if (!user) {
+    // Delete operations shall be idempotent
+    if (req.method === "DELETE") { 
       res.status(200).json(success(null, "User deleted"));
       return;
     }
-
-    res.status(405).json(error("Method not allowed", 405));
-  } catch (err: any) {
-    res.status(500).json(error(err.message, 500));
+    res.status(404).json(error("User not found", 404));
+    return;
   }
+
+  if (req.method === "GET") {
+    res.status(200).json(success(user));
+    return;
+  }
+
+  if (req.method === "PUT") {
+    const body: UpdateUserDto = req.body;
+    const updatedUser = await updateUser(userId, body);
+    res.status(200).json(success<UserResponse>(updatedUser, "User updated"));
+    return;
+  }
+
+  if (req.method === "DELETE") {
+    await deleteUser(userId);
+    res.status(200).json(success(null, "User deleted"));
+    return;
+  }
+
+  res.status(405).json(error("Method not allowed", 405));
+  return;
 };
 
 export default handler;
