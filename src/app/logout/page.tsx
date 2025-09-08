@@ -14,11 +14,7 @@ export default function LogoutPage() {
     (async () => {
       try {
         // 1) 让后端清理 httpOnly cookie
-        await fetch("/api/auth/logout", {
-          method: "POST",
-          credentials: "include",
-        }).catch(() => {});
-
+        await fetch("/api/auth/session", { method: "DELETE", credentials: "include" });
         // 2) 客户端兜底：清理可访问存储
         try {
           localStorage.removeItem("token");

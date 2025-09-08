@@ -5,49 +5,57 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const sp = useSearchParams();                   // sp 可能为 null
-  const nextUrl = sp?.get("next") ?? "/dashboard";
+    const router = useRouter();
+    const sp = useSearchParams();                   // sp 可能为 null
+    const nextUrl = sp?.get("next") ?? "/dashboard";
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(true);
-  const [showPwd, setShowPwd] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [remember, setRemember] = useState(true);
+    const [showPwd, setShowPwd] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-  async function onSubmit(e: React.FormEvent) {
+    async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
     try {
+        // ① 用后端要求的字段名登录（identifier + password）
         const res = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ identifier:email, password}),
-            credentials: "include",
-      });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier: email, password }),
+        credentials: "include",
+        });
 
-      if (!res.ok) {
-        let msg = "Login failed";
-        try {
-            const j = await res.json();
-            msg = j?.message || msg;
-        } catch {
-            msg = (await res.text()) || msg;
+        const json = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(json?.message || "Login failed");
+
+        const token = json?.data?.token;
+        if (!token) throw new Error("Missing token from server");
+
+        // ② 让 Next 的 API 把 token 写入 HttpOnly Cookie（安全）
+        const setRes = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, remember }),
+        credentials: "include",
+        });
+        if (!setRes.ok) {
+        const j = await setRes.json().catch(() => null);
+        throw new Error(j?.message || "Failed to persist session");
         }
-        throw new Error(msg);
-      }
 
-      // 登录成功，跳转
-      router.replace(nextUrl);
-      router.refresh();
+        // ③ 跳转
+        router.replace(nextUrl);
+        router.refresh();
     } catch (err: any) {
-      setError(err.message || "Login failed");
+        setError(err.message || "Login failed");
     } finally {
-      setSubmitting(false);
+        setSubmitting(false);
     }
-  }
+    }
 
   return (
     <div className="min-h-screen bg-slate-50">
