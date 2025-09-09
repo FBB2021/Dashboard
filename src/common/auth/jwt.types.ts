@@ -9,5 +9,5 @@ export interface JwtPayload {
   exp?: number;
 }
 
-export type AuthedRequest = NextApiRequest & { user: JwtPayload };
+export type AuthedRequest = NextApiRequest & { user?: JwtPayload };
 export type AuthedHandler = (req: AuthedRequest, res: NextApiResponse) => any;

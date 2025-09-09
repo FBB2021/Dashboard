@@ -3,24 +3,55 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Package, User, HelpCircle, LogOut, Settings, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 
+// Utility: combine classNames
 const cn = (...a: (string | false | undefined)[]) => a.filter(Boolean).join(" ");
 
-const NAV = [
-  { href: "/dashboard", label: "Dashboard",   icon: LayoutDashboard, trail: false },
-  { href: "/products",  label: "Product",     icon: Package,         trail: false },
-  { href: "/users",     label: "User Account",icon: User,            trail: false },
+// Base navigation items (without User Account)
+const BASE_NAV = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, trail: false },
+  { href: "/products",  label: "Product",   icon: Package,         trail: false },
 ];
 
 function isActive(path: string, href: string) {
   if (!path) return false;
   if (href === "/dashboard") return path === "/dashboard";
-  // 同级：匹配自身或其子路由
+  // Match self or child routes
   return path === href || path.startsWith(href + "/");
 }
 
+type UserInfo = {
+  username: string;
+  role: string;
+};
+
 export default function Sidebar() {
   const pathname = usePathname() ?? "";
+  const [user, setUser] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    // Fetch current user info from whoami API
+    async function load() {
+      try {
+        const res = await fetch("/api/auth/whoami", { credentials: "include" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.payload) {
+          setUser({ username: data.payload.username, role: data.payload.role });
+        }
+      } catch {
+        // ignore errors
+      }
+    }
+    load();
+  }, []);
+
+  // Build navigation dynamically
+  const NAV = [...BASE_NAV];
+  if (user?.role === "ADMIN") {
+    NAV.push({ href: "/users", label: "User Account", icon: User, trail: false });
+  }
 
   return (
     <aside
@@ -33,7 +64,9 @@ export default function Sidebar() {
         <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-400 to-sky-400" />
         <div className="min-w-0">
           <p className="text-xs text-slate-500">Welcome back,</p>
-          <p className="font-semibold text-slate-800 truncate">Drax</p>
+          <p className="font-semibold text-slate-800 truncate">
+            {user?.username ?? "Loading.."}
+          </p>
         </div>
         <div className="ml-auto text-slate-400"><Settings size={18} /></div>
       </div>
@@ -52,9 +85,15 @@ export default function Sidebar() {
                 active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-50"
               )}
             >
-              <span className={cn("text-slate-400", active && "text-white/70")}><Icon size={18} /></span>
+              <span className={cn("text-slate-400", active && "text-white/70")}>
+                <Icon size={18} />
+              </span>
               <span className="font-medium">{label}</span>
-              {trail && <span className={cn("ml-auto text-slate-300", active && "text-white/50")}><Menu size={16} /></span>}
+              {trail && (
+                <span className={cn("ml-auto text-slate-300", active && "text-white/50")}>
+                  <Menu size={16} />
+                </span>
+              )}
             </Link>
           );
         })}

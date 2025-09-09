@@ -1,15 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { withAuth } from "@/common/auth/withAuth";
 import { withRole } from "@/common/auth/authorize";
+import type { AuthedRequest, AuthedHandler } from "@/common/auth/jwt.types";
 
-async function handler(req: NextApiRequest & { user: any }, res: NextApiResponse) {
-  // req.user is available here
-  return { message: `Hello ${req.user.username}, admin area ok.` };
-}
+const handler: AuthedHandler = async (req: AuthedRequest, res: NextApiResponse) => {
+  return { message: `Hello ${req.user?.username}, admin area ok.` };
+};
 
 export default withErrorHandling(
-  withAuth(
-    withRole("ADMIN")(handler)
-  )
+  withAuth(withRole("ADMIN")(handler))
 );

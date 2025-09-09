@@ -1,23 +1,21 @@
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { AppError } from "@/common/exceptions";
-import type { JwtPayload, AuthedHandler } from "./jwt.types";
+import type { AuthedRequest, JwtPayload, AuthedHandler } from "@/common/auth/jwt.types";
 
-const SECRET = process.env.JWT_SECRET || "supersecretkey";
+export function withAuth(handler: AuthedHandler): AuthedHandler {
+  return async (req: AuthedRequest, res: NextApiResponse) => {
+    const bearer = req.headers.authorization?.split(" ")[1];
+    const token = req.cookies?.token || bearer;
+    if (!token) throw new AppError("Unauthorized", 401);
 
-export function withAuth(handler: AuthedHandler): NextApiHandler {
-  return async (req: NextApiRequest, res: NextApiResponse) => {
-    const auth = req.headers.authorization;
-    if (!auth?.startsWith("Bearer ")) throw new AppError("Unauthorized", 401);
-
-    const token = auth.slice("Bearer ".length).trim();
-    let decoded: JwtPayload;
     try {
-      decoded = jwt.verify(token, SECRET) as JwtPayload;
+      const SECRET = process.env.JWT_SECRET || "supersecretkey";
+      const payload = jwt.verify(token, SECRET) as JwtPayload;
+      req.user = payload; // ✅ 注入 user
+      return handler(req, res);
     } catch {
-      throw new AppError("Invalid token", 401);
+      throw new AppError("Unauthorized", 401);
     }
-
-    return handler(Object.assign(req, { user: decoded }), res);
   };
 }
