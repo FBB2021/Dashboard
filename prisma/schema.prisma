@@ -93,3 +93,73 @@ model RolePermission {
   /// Composite primary key - ensures a unique role-permission pair
   @@id([roleId, permissionId]) 
 }
+
+// =====================
+// Product Entity
+// =====================
+model Product {
+  /// Primary key - unique identifier for each product
+  id        String       @id
+
+  /// Name of the product
+  name      String
+
+  /// Opening inventory at the beginning of Day 1
+  openingInventory Int
+
+  /// Relation: one product can have many procurement records
+  procurements     Procurement[]
+
+  /// Relation: one product can have many sales records
+  sales            Sale[]
+}
+
+// =====================
+// Procurement Entity
+// =====================
+model Procurement {
+  /// Primary key - auto-incremented identifier for procurement record
+  id        Int      @id @default(autoincrement())
+
+  /// Foreign key reference to the product being procured
+  productId String
+
+  /// Relation: each procurement record belongs to one product
+  product   Product  @relation(fields: [productId], references: [id])
+
+  /// The day number (e.g., 1, 2, 3)
+  day       Int
+
+  /// Quantity of items procured
+  qty       Int
+
+  /// Price per unit for procurement (using Float in SQLite)
+  price     Float
+
+  @@unique([productId, day])
+}
+
+// =====================
+// Sale Entity
+// =====================
+model Sale {
+  /// Primary key - auto-incremented identifier for sales record
+  id        Int      @id @default(autoincrement())
+
+  /// Foreign key reference to the product being sold
+  productId String
+
+  /// Relation: each sales record belongs to one product
+  product   Product  @relation(fields: [productId], references: [id])
+
+  /// The day number (e.g., 1, 2, 3)
+  day       Int
+
+  /// Quantity of items sold
+  qty       Int
+
+  /// Price per unit for sales (using Float in SQLite)
+  price     Float
+
+  @@unique([productId, day])
+}
