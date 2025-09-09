@@ -1,4 +1,8 @@
 import {
+  CreateProductDto,
+  UpdateProductDto,
+} from "@/dtos/request_dtos/product.dto";
+import {
   ProductHistoryResponse,
   ProductsHistoryResponse,
 } from "@/dtos/response_dtos/product.response.dto";
@@ -100,4 +104,78 @@ export async function getProductsHistory(productIds: string[]): Promise<Products
       history,
     };
   });
+}
+
+/** Create a new product with optional procurement and sales records */
+export async function createProduct(data: CreateProductDto): Promise<ProductBasic> {
+  const existing = await prisma.product.findUnique({ where: { id: data.id } });
+  if (existing) throw new AppError("Product ID already exists", 400);
+
+  const product = await prisma.product.create({
+    data: {
+      id: data.id,
+      name: data.name,
+      openingInventory: data.openingInventory,
+      procurements: data.procurements
+        ? { create: data.procurements }
+        : undefined,
+      sales: data.sales ? { create: data.sales } : undefined,
+    },
+    select: { id: true, name: true },
+  });
+
+  return product;
+}
+
+/** Update a product by ID (including procurement & sales history) */
+export async function updateProduct(id: string, data: UpdateProductDto): Promise<ProductBasic> {
+  const product = await prisma.product.findUnique({ where: { id } });
+  if (!product) throw new AppError("Product not found", 404);
+
+  // 1. Update product
+  const updatedProduct = await prisma.product.update({
+    where: { id },
+    data: {
+      name: data.name,
+      openingInventory: data.openingInventory,
+    },
+    select: { id: true, name: true },
+  });
+
+  // 2. Update procurements
+  if (data.procurements && data.procurements.length > 0) {
+    for (const proc of data.procurements) {
+      await prisma.procurement.upsert({
+        where: { productId_day: { productId: id, day: proc.day } },
+        update: { qty: proc.qty, price: proc.price },
+        create: { productId: id, day: proc.day, qty: proc.qty, price: proc.price },
+      });
+    }
+  }
+
+  // 3. Update sales
+  if (data.sales && data.sales.length > 0) {
+    for (const sale of data.sales) {
+      await prisma.sale.upsert({
+        where: { productId_day: { productId: id, day: sale.day } },
+        update: { qty: sale.qty, price: sale.price },
+        create: { productId: id, day: sale.day, qty: sale.qty, price: sale.price },
+      });
+    }
+  }
+
+  return updatedProduct;
+}
+
+/** Delete a product by ID */
+export async function deleteProduct(id: string): Promise<void> {
+  const product = await prisma.product.findUnique({ where: { id } });
+  if (!product) {
+    // idempotent delete: no error if product doesn't exist
+    return;
+  }
+
+  await prisma.procurement.deleteMany({ where: { productId: id } });
+  await prisma.sale.deleteMany({ where: { productId: id } });
+  await prisma.product.delete({ where: { id } });
 }

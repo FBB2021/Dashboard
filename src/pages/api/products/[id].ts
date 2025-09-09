@@ -1,11 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
-import { getProductHistory } from "@/services/product.service";
+import {
+  getProductHistory,
+  updateProduct,
+  deleteProduct,
+} from "@/services/product.service";
+import { UpdateProductDto } from "@/dtos/request_dtos/product.dto";
 
 /**
  * Handles requests for /api/products/[id]
- * - GET: Fetch product history (inventory, procurement, sales)
+ * - GET: Fetch product history
+ * - PUT: Update product (name, openingInventory)
+ * - DELETE: Remove product (and related procurement/sales)
  */
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
@@ -16,6 +23,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
     return await getProductHistory(id);
+  }
+
+  if (req.method === "PUT") {
+    const body: UpdateProductDto = req.body;
+    return await updateProduct(id, body);
+  }
+
+  if (req.method === "DELETE") {
+    await deleteProduct(id);
+    return null;
   }
 
   throw new AppError("Method not allowed", 405);
