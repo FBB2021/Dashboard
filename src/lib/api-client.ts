@@ -64,4 +64,18 @@ export const del  = <T = unknown>(path: string, init?: RequestInit) =>
   api<T>(path, { method: "DELETE", ...init });
 
 // SWR/React Query friendly fetcher
-export const swrFetcher = (url: string) => api(url);
+export async function swrFetcher(input: RequestInfo, init?: RequestInit) {
+  const res = await fetch(input, init);
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || res.statusText);
+  }
+  const json = await res.json().catch(() => null);
+
+  // Unwrap common API envelopes: { data: ... } / { result: ... }
+  if (json && typeof json === "object") {
+    if ("data" in json) return (json as any).data;
+    if ("result" in json) return (json as any).result;
+  }
+  return json; // fall back to raw
+}
