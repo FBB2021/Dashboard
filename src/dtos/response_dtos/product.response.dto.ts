@@ -33,3 +33,22 @@ export interface ProductHistoryResponse {
  * Used for product comparison queries.
  */
 export type ProductsHistoryResponse = ProductHistoryResponse[];
+
+
+// =====================
+// Product Edit Response DTO
+// =====================
+
+export interface ProductLine {
+  day: number;
+  qty: number;
+  price: number;
+}
+
+export interface ProductEditResponse {
+  id: string;
+  name: string;
+  openingInventory: number;
+  procurements: ProductLine[]; // day, qty, price
+  sales: ProductLine[];        // day, qty, price
+}

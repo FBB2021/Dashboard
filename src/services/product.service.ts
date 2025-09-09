@@ -9,6 +9,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { AppError } from "@/common/exceptions";
 import { ProductBasic } from "@/dtos/response_dtos/product.response.dto";
+import type { ProductEditResponse } from "@/dtos/response_dtos/product.response.dto";
 
 
 /**
@@ -178,4 +179,25 @@ export async function deleteProduct(id: string): Promise<void> {
   await prisma.procurement.deleteMany({ where: { productId: id } });
   await prisma.sale.deleteMany({ where: { productId: id } });
   await prisma.product.delete({ where: { id } });
+}
+
+/** Get raw lines for editing (name, openingInventory, procurements[], sales[]) */
+export async function getProductEditData(id: string): Promise<ProductEditResponse> {
+  const product = await prisma.product.findUnique({
+    where: { id },
+    include: {
+      procurements: { orderBy: { day: "asc" } },
+      sales: { orderBy: { day: "asc" } },
+    },
+  });
+
+  if (!product) throw new AppError("Product not found", 404);
+
+  return {
+    id: product.id,
+    name: product.name,
+    openingInventory: product.openingInventory,
+    procurements: product.procurements.map(p => ({ day: p.day, qty: p.qty, price: p.price })),
+    sales: product.sales.map(s => ({ day: s.day, qty: s.qty, price: s.price })),
+  };
 }
