@@ -117,19 +117,31 @@ export default function ProductsTable() {
     if (!file) return;
 
     try {
-      // TODO: hook this to your real import API
-      // const fd = new FormData();
-      // fd.append("file", file);
-      // const res = await fetch("/api/products/import", { method: "POST", body: fd });
-      // if (!res.ok) throw new Error(await res.text());
-      alert(`Selected: ${file.name}\n\nHook this up to /api/products/import`);
-      startTransition(() => {
-      void mutate();   
+      const fd = new FormData();
+      fd.append("file", file);
+
+      const res = await fetch("/api/products/import", {
+        method: "POST",
+        body: fd,
       });
+
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(txt || "Import failed");
+      }
+
+      const json = await res.json();
+      alert(
+        `Import finished.\n\n` +
+        `Imported: ${json.data.imported}\nUpdated: ${json.data.updated}\nFailed: ${json.data.failed}`
+      );
+
+      // Refresh product list
+      startTransition(() => { void mutate(); });
     } catch (err: any) {
       alert(err?.message || "Import failed");
     } finally {
-      if (fileRef.current) fileRef.current.value = ""; // allow picking the same file again
+      if (fileRef.current) fileRef.current.value = ""; // allow picking same file again
     }
   }
 

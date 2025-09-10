@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { formatDateShort } from "@/util/date";
+import { formatDateShort } from "@/utils/date";
 
 /** Server DTOs */
 type Role = { id: number; name: string };
