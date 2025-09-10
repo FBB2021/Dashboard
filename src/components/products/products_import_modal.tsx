@@ -359,7 +359,7 @@ export default function ImportModal({
                       <input
                         type="number"
                         value={it.openingInventory}
-                        onChange={(e) => updateItem(it.id, { openingInventory: num(e.target.value) } as any)}
+                        onChange={(e) => updateItem(it.id, { openingInventory: num(e.target.value) })}
                         className="w-28 rounded border border-slate-200 px-2 py-1 text-sm"
                       />
                     </td>

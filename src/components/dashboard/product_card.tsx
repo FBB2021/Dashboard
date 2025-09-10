@@ -22,7 +22,7 @@ function StatCard({ title, primary, hint }: { title: string; primary: string; hi
 const compact = (n: number) =>
   new Intl.NumberFormat(undefined, { notation: "compact", maximumFractionDigits: 1 }).format(n);
 const currency = (n: number) =>
-  new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+  new Intl.NumberFormat(undefined, { style: "currency", currency: "AUD", maximumFractionDigits: 0 }).format(n);
 
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;

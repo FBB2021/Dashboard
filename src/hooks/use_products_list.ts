@@ -6,9 +6,11 @@ import { swrFetcher } from "@/lib/api-client";
 import type { ProductBasic } from "@/dtos/response_dtos/product.response.dto";
 
 export function useProductsList() {
-  const { data, error, isLoading, mutate } = useSWR<ProductBasic[]>("/api/products/list", swrFetcher as any, {
-    revalidateOnFocus: false,
-  } as any);
+  const { data, error, isLoading, mutate } = useSWR<ProductBasic[]>(
+    "/api/products/list",
+    swrFetcher<ProductBasic[]>,
+    { revalidateOnFocus: false }
+  );
 
   return {
     products: data ?? [],
