@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useMemo, useState, useTransition, useRef } from "react";
+import React, { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useProductsList } from "@/hooks/use_products_list";
 import type { ProductBasic } from "@/dtos/response_dtos/product.response.dto";
+import ImportModal from "@/components/products/products_import_modal";
 import {
-  Search, Upload, Filter, Calendar, Pencil, Trash, AlertCircle, ChevronDown, Plus
+  Search, Upload, Calendar, Pencil, Trash, AlertCircle, ChevronDown, Plus
 } from "lucide-react";
 
 // =====================
@@ -55,9 +56,9 @@ function SplitNewButton({ onOpenMenu }: { onOpenMenu: () => void }) {
 export default function ProductsTable() {
   const { products, isLoading, isError, error, mutate } = useProductsList();
 
-  // Split button dropdown & file input
+  // Split button dropdown & import modal
   const [menuOpen, setMenuOpen] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [importOpen, setImportOpen] = useState(false);
 
   // Local UI state
   const [query, setQuery] = useState("");
@@ -104,47 +105,6 @@ export default function ProductsTable() {
     });
   }
 
-  // =====================
-  // Import dropdown actions
-  // =====================
-  function openFilePicker() {
-    fileRef.current?.click();
-    setMenuOpen(false);
-  }
-
-  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-
-      const res = await fetch("/api/products/import", {
-        method: "POST",
-        body: fd,
-      });
-
-      if (!res.ok) {
-        const txt = await res.text().catch(() => "");
-        throw new Error(txt || "Import failed");
-      }
-
-      const json = await res.json();
-      alert(
-        `Import finished.\n\n` +
-        `Imported: ${json.data.imported}\nUpdated: ${json.data.updated}\nFailed: ${json.data.failed}`
-      );
-
-      // Refresh product list
-      startTransition(() => { void mutate(); });
-    } catch (err: any) {
-      alert(err?.message || "Import failed");
-    } finally {
-      if (fileRef.current) fileRef.current.value = ""; // allow picking same file again
-    }
-  }
-
   return (
     <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
       {/* Header */}
@@ -169,28 +129,22 @@ export default function ProductsTable() {
           {menuOpen && (
             <div
               role="menu"
-              className="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white shadow-lg z-10"
+              className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-white shadow-lg z-10"
               onMouseLeave={() => setMenuOpen(false)}
             >
               <button
-                onClick={openFilePicker}
+                onClick={() => {
+                  setImportOpen(true); // 👉 open modal (parse → preview → commit)
+                  setMenuOpen(false);
+                }}
                 className="w-full px-3 py-2 text-left text-sm hover:bg-slate-50 inline-flex items-center gap-2"
               >
                 <Upload className="h-4 w-4" />
-                Import from .xlsx
+                Import from .xlsx (Preview & Confirm)
               </button>
             </div>
           )}
         </div>
-
-        {/* Hidden file input for import */}
-        <input
-          ref={fileRef}
-          type="file"
-          accept=".xlsx,.xls"
-          className="hidden"
-          onChange={onFileChange}
-        />
 
         {/* Sort */}
         <div className="relative">
@@ -295,6 +249,16 @@ export default function ProductsTable() {
           {isPending && <div className="mt-2 text-xs text-slate-500">Refreshing…</div>}
         </div>
       )}
+
+      {/* Import modal (parse → preview → commit) */}
+      <ImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={(sum) => {
+          alert(`Imported: ${sum.imported}\nUpdated: ${sum.updated}\nFailed: ${sum.failed}`);
+          startTransition(() => { void mutate(); });
+        }}
+      />
     </div>
   );
 }

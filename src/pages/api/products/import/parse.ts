@@ -1,5 +1,7 @@
 // =====================
-// POST /api/products/import
+// POST /api/products/import/parse
+// - Multipart .xlsx upload (field: "file")
+// - Parses and returns CreateProductDto[] (no DB writes)
 // =====================
 
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -7,20 +9,17 @@ import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
 import formidable, { type File } from "formidable"; // using our shim
 import fs from "node:fs/promises";
-import { importProductsFromExcel } from "@/services/product_import.service";
+import { parseExcelBuffer } from "@/services/product_import.service";
 
-// Disable Next.js body parser to allow formidable to handle the stream
-export const config = {
-  api: { bodyParser: false, sizeLimit: "10mb" },
-};
+// Disable Next.js default body parser to allow formidable stream
+export const config = { api: { bodyParser: false, sizeLimit: "10mb" } };
 
-// ---------- Helper: parse multipart form ----------
+// Parse multipart form (robust filter for excel files)
 async function parseForm(req: NextApiRequest): Promise<{ file?: File }> {
   const form = formidable({
     multiples: false,
     keepExtensions: true,
-    maxFileSize: 5 * 1024 * 1024, // 5MB
-    // Robust filter: allow various excel mimes and fallback by filename
+    maxFileSize: 10 * 1024 * 1024,
     filter: (part) => {
       const t = part.mimetype || "";
       const name = part.originalFilename || "";
@@ -32,22 +31,14 @@ async function parseForm(req: NextApiRequest): Promise<{ file?: File }> {
   return new Promise((resolve, reject) => {
     form.parse(req, (err, _fields, files) => {
       if (err) return reject(err);
-
-      // Try to get 'file' field first; otherwise first file in map
-      let f: File | undefined;
-      const direct = files as Record<string, File | File[]>;
-      if (direct.file) {
-        f = Array.isArray(direct.file) ? direct.file[0] : (direct.file as File);
-      } else {
-        const any = Object.values(direct)[0];
-        f = Array.isArray(any) ? any[0] : (any as File | undefined);
-      }
+      const map = files as Record<string, File | File[]>;
+      const pick = (v: File | File[] | undefined) => (Array.isArray(v) ? v[0] : v);
+      const f = pick(map.file) ?? pick(Object.values(map)[0]);
       resolve({ file: f });
     });
   });
 }
 
-// ---------- Controller ----------
 async function handler(req: NextApiRequest, _res: NextApiResponse) {
   if (req.method !== "POST") throw new AppError("Method not allowed", 405);
 
@@ -57,8 +48,8 @@ async function handler(req: NextApiRequest, _res: NextApiResponse) {
   }
 
   const buf = await fs.readFile(file.filepath);
-  const summary = await importProductsFromExcel(buf);
-  return summary;
+  const dtos = parseExcelBuffer(buf); // no DB writes
+  return dtos;
 }
 
 export default withErrorHandling(handler);
