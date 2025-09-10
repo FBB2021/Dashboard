@@ -142,7 +142,7 @@ src/
 ### 1. Clone the Repository
 ```
 git clone https://github.com/FBB2021/Dashboard.git
-cd data-visualisation-dashboard
+cd Dashboard
 ```
 ### 2. Install Dependencies
 ```
@@ -150,7 +150,6 @@ npm install
 ```
 ### 3. Launch project
 ```
-npm install
 npm run dev
 ```
 ### 4. Testing users
