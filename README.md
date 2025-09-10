@@ -140,24 +140,24 @@ src/
 ## ⚙️ Getting Started
 
 ### 1. Clone the Repository
-
+```
 git clone <your-repo-url>
 cd data-visualisation-dashboard
-
+```
 ### 2. Install Dependencies
-
+```
 npm install
-
+```
 ### 3. Launch project
-
+```
 npm install
 npm run dev
-
+```
 ### 4. Testing users
-
+```
 - Admin user: admin@example.com | admin123
 - General user: demo@example.com | user123
-
+```
 ---
 
 ✅ That's it
