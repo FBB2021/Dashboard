@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { formatDateShort } from "@/utils/date";
+import type { SVGProps } from "react";
 
 /** Server DTOs */
 type Role = { id: number; name: string };
@@ -23,21 +24,24 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
     headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
     credentials: "include",
   });
-  let payload: any = null;
+
+  let payload: unknown = null;
   try {
     payload = await res.json();
   } catch {
     // ignore
   }
+
   if (!res.ok) {
     const msg =
-      payload?.message ||
+      (payload as { message?: string })?.message ||
       (res.status === 401 || res.status === 403
         ? "Unauthorized"
         : `Request failed: ${res.status}`);
     throw new Error(msg);
   }
-  return (payload?.data ?? payload) as T;
+
+  return ((payload as { data?: T }).data ?? payload) as T;
 }
 
 /** Pretty status (purely visual) */
@@ -74,34 +78,64 @@ const Badge = ({
   );
 };
 
-const IconSearch = (props: any) => (
+/** Icons */
+const IconSearch = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-slate-400" {...props}>
-    <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      d="m21 21-4.3-4.3m1.8-5.2a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+    <path
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m21 21-4.3-4.3m1.8-5.2a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+    />
   </svg>
 );
-const IconSort = (props: any) => (
+
+const IconSort = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" {...props}>
-    <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      d="M8 7h8M6 11h12M10 15h4" />
+    <path
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8 7h8M6 11h12M10 15h4"
+    />
   </svg>
 );
-const IconCalendar = (props: any) => (
+
+const IconCalendar = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" {...props}>
-    <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      d="M8 2v4m8-4v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+    <path
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8 2v4m8-4v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"
+    />
   </svg>
 );
-const IconEdit = (props: any) => (
+
+const IconEdit = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" {...props}>
-    <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      d="M12 20h9M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z" />
+    <path
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 20h9M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"
+    />
   </svg>
 );
-const IconTrash = (props: any) => (
+
+const IconTrash = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" {...props}>
-    <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      d="M4 7h16M10 11v6M14 11v6M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3" />
+    <path
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4 7h16M10 11v6M14 11v6M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13M9 7V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"
+    />
   </svg>
 );
 
@@ -149,8 +183,9 @@ export default function UsersPage() {
     try {
       const list = await api<User[]>("/api/users");
       setUsers(list);
-    } catch (e: any) {
-      setErr(e.message || "Failed to load users.");
+    } catch (e: unknown) {
+      if (e instanceof Error) setErr(e.message);
+      else setErr("Failed to load users.");
     } finally {
       setLoading(false);
     }
@@ -182,8 +217,7 @@ export default function UsersPage() {
       });
     }
     out.sort((a, b) => {
-      const diff =
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      const diff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       return sortAsc ? diff : -diff;
     });
     return out;
@@ -198,14 +232,13 @@ export default function UsersPage() {
     }
     setCreating(true);
     try {
-      const payload: any = {
+      const payload: CreateForm = {
         username: createForm.username.trim(),
         email: createForm.email.trim(),
         password: createForm.password,
+        roleId: createForm.roleId !== "" ? Number(createForm.roleId) : undefined,
       };
-      if (createForm.roleId !== "" && typeof createForm.roleId === "number") {
-        payload.roleId = createForm.roleId;
-      }
+
       const u = await api<User>("/api/users", {
         method: "POST",
         body: JSON.stringify(payload),
@@ -213,8 +246,8 @@ export default function UsersPage() {
       setUsers((prev) => [u, ...prev]);
       setCreateForm({ username: "", email: "", password: "", roleId: "" });
       setCreateOpen(false);
-    } catch (e: any) {
-      alert(e.message || "Create failed.");
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "Create failed.");
     } finally {
       setCreating(false);
     }
@@ -241,12 +274,12 @@ export default function UsersPage() {
       return;
     }
     try {
-      const payload: any = {
+      const payload: EditForm = {
         username: editForm.username.trim(),
         email: editForm.email.trim(),
+        password: editForm.password?.trim() || undefined,
+        roleId: editForm.roleId !== "" ? Number(editForm.roleId) : undefined,
       };
-      if (editForm.password && editForm.password.trim()) payload.password = editForm.password;
-      if (editForm.roleId !== "" && typeof editForm.roleId === "number") payload.roleId = editForm.roleId;
 
       const updated = await api<User>(`/api/users/${editing.id}`, {
         method: "PUT",
@@ -254,8 +287,8 @@ export default function UsersPage() {
       });
       setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)));
       closeEdit();
-    } catch (e: any) {
-      alert(e.message || "Save failed.");
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "Save failed.");
     }
   }
 
@@ -266,21 +299,21 @@ export default function UsersPage() {
     setUsers((u) => u.filter((x) => x.id !== id));
     try {
       await api<void>(`/api/users/${id}`, { method: "DELETE" });
-    } catch (e: any) {
+    } catch (e: unknown) {
       setUsers(prev); // rollback
-      alert(e.message || "Delete failed.");
+      alert(e instanceof Error ? e.message : "Delete failed.");
     }
   }
 
   /** Number input helper */
   const onNumChange =
-    <T extends { [k: string]: any }>(
+    <T extends Record<string, unknown>>(
       setter: React.Dispatch<React.SetStateAction<T>>,
       key: keyof T
     ) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const v = e.target.value;
-      setter((s) => ({ ...s, [key]: v === "" ? "" : Number(v) }));
+      setter((s) => ({ ...s, [key]: v === "" ? "" : Number(v) } as T));
     };
 
   return (
