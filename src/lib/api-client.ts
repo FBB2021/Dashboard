@@ -43,7 +43,12 @@ export async function api<T = unknown>(
   const body = tryJson();
 
   if (!res.ok) {
-    const msg = (body as any)?.message || res.statusText || "Request failed";
+  const msg =
+    (typeof body === "object" && body !== null && "message" in body
+      ? (body as { message?: string }).message
+      : undefined) ||
+    res.statusText ||
+    "Request failed";
     throw new ApiError(msg, res.status, body);
   }
 
@@ -64,18 +69,26 @@ export const del  = <T = unknown>(path: string, init?: RequestInit) =>
   api<T>(path, { method: "DELETE", ...init });
 
 // SWR/React Query friendly fetcher
-export async function swrFetcher(input: RequestInfo, init?: RequestInit) {
+export async function swrFetcher<T = unknown>(
+  input: RequestInfo,
+  init?: RequestInit
+): Promise<T> {
   const res = await fetch(input, init);
   if (!res.ok) {
     const text = await res.text().catch(() => "");
     throw new Error(text || res.statusText);
   }
-  const json = await res.json().catch(() => null);
+
+  const json: unknown = await res.json().catch(() => null);
 
   // Unwrap common API envelopes: { data: ... } / { result: ... }
   if (json && typeof json === "object") {
-    if ("data" in json) return (json as any).data;
-    if ("result" in json) return (json as any).result;
+    if ("data" in json) {
+      return (json as { data: T }).data;
+    }
+    if ("result" in json) {
+      return (json as { result: T }).result;
+    }
   }
-  return json; // fall back to raw
+  return json as T; // fall back to raw
 }

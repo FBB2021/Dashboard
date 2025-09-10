@@ -8,7 +8,7 @@ import type { CreateProductDto } from "@/dtos/request_dtos/product.dto";
 // Helpers
 // =====================
 const cn = (...a: (string | false | undefined)[]) => a.filter(Boolean).join(" ");
-const num = (v: any, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
+const num = (v: unknown, d = 0): number => Number.isFinite(Number(v)) ? Number(v) : d;
 
 type DayRow = { day: number; pQty: number; pPrice: number; sQty: number; sPrice: number };
 
@@ -230,7 +230,12 @@ export default function ImportModal({
   const updateRows = (id: string, rows: DayRow[]) => {
     const procurements = rows.map((r) => ({ day: r.day, qty: r.pQty, price: r.pPrice }));
     const sales = rows.map((r) => ({ day: r.day, qty: r.sQty, price: r.sPrice }));
-    updateItem(id, { procurements, sales } as any);
+
+    const payload: Pick<CreateProductDto, "procurements" | "sales"> = {
+      procurements,
+      sales,
+    };
+    updateItem(id, payload);
   };
 
   const removeItem = (id: string) => setItems((cur) => cur.filter((it) => it.id !== id));

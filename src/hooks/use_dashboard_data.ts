@@ -74,16 +74,11 @@ export function useDashboardData({
   // Always send requests (even if no product is selected)
   const key = `/api/admin/dashboard?${qs}`;
 
-  const swr = useSWR<DashboardResponse>(key, swrFetcher as any, {
+  const swr = useSWR<DashboardResponse>(key, swrFetcher<DashboardResponse>, {
     revalidateOnFocus: false,
-  } as any);
+  });
 
-  const { data, error, mutate } = swr;
-
-  const isLoading: boolean =
-    typeof (swr as any).isLoading === "boolean"
-      ? (swr as any).isLoading
-      : !data && !error;
+  const { data, error, mutate, isLoading } = swr;
 
   return {
     series: data?.series ?? [],

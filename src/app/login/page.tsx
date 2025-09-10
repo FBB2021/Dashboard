@@ -50,8 +50,14 @@ export default function LoginPage() {
         // ③ Redirect
         router.replace(nextUrl);
         router.refresh();
-    } catch (err: any) {
-        setError(err.message || "Login failed");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else if (typeof err === "string") {
+        setError(err);
+      } else {
+        setError("Login failed");
+      }
     } finally {
         setSubmitting(false);
     }

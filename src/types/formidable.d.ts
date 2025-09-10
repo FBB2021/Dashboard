@@ -2,6 +2,8 @@
 // Minimal shim for formidable (v2/v3 compatible)
 // =====================
 declare module "formidable" {
+  import type { IncomingMessage } from "http";
+
   export type File = {
     filepath: string;
     originalFilename?: string | null;
@@ -24,7 +26,10 @@ declare module "formidable" {
   export type FilesMap = Record<string, File | File[]>;
 
   export interface FormidableInstance {
-    parse(req: any, cb: (err: any, fields: any, files: FilesMap) => void): void;
+    parse(
+      req: IncomingMessage,
+      cb: (err: Error | null, fields: Record<string, string>, files: FilesMap) => void
+    ): void;
   }
 
   const formidable: (opts?: Options) => FormidableInstance;

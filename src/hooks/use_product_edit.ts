@@ -7,12 +7,15 @@ import type { ProductEditResponse } from "@/dtos/response_dtos/product.response.
 
 export function useProductEdit(id: string) {
   const key = id ? `/api/products/${id}/edit` : null;
-  const { data, error, isLoading, mutate } = useSWR<any>(key, swrFetcher as any, {
-    revalidateOnFocus: false,
-  } as any);
+
+  const { data, error, isLoading, mutate } = useSWR<ProductEditResponse>(
+    key,
+    swrFetcher<ProductEditResponse>,
+    { revalidateOnFocus: false }
+  );
 
   const payload: ProductEditResponse | undefined =
-    data && !("data" in data) ? data : data?.data;
+    data && !("data" in data) ? data : (data as ProductEditResponse | undefined);
 
   return {
     data: payload,

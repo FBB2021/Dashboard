@@ -7,9 +7,12 @@ import type { ProductHistoryResponse } from "@/dtos/response_dtos/product.respon
 
 export function useProductHistory(id: string) {
   const key = id ? `/api/products/${id}` : null;
-  const { data, error, isLoading, mutate } = useSWR<ProductHistoryResponse>(key, swrFetcher as any, {
-    revalidateOnFocus: false,
-  } as any);
+
+  const { data, error, isLoading, mutate } = useSWR<ProductHistoryResponse>(
+    key,
+    swrFetcher<ProductHistoryResponse>,
+    { revalidateOnFocus: false }
+  );
 
   return {
     data,
