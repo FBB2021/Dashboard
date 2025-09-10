@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { getUsers, createUser } from "@/services/user.service";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
@@ -10,7 +10,7 @@ import { withRole } from "@/common/auth/authorize";
  * - GET: Fetch all users
  * - POST: Create a new user
  */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   if (req.method === "GET") {
     return await getUsers();
   }

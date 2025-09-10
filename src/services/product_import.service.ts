@@ -65,9 +65,15 @@ export async function importProducts(items: CreateProductDto[]): Promise<ImportS
         });
         summary.updated++;
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       summary.failed++;
-      summary.errors.push({ id: p.id ?? "UNKNOWN", message: e?.message || "Unknown error" });
+      const message =
+        e instanceof Error
+          ? e.message
+          : typeof e === "string"
+          ? e
+          : "Unknown error";
+      summary.errors.push({ id: p.id ?? "UNKNOWN", message });
     }
   }
 

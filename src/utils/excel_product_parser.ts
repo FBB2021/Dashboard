@@ -84,7 +84,7 @@ export function parseProductsExcel(buf: Buffer): CreateProductDto[] {
   const ws = wb.Sheets[sheetName];
 
   // header:1 returns 2D array of raw values (strings preferred)
-  const rows: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" }) as any[][];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" }) as (string | number)[][];
   if (!rows.length) return [];
 
   const header = rows[0].map((h) => (h == null ? "" : String(h)));

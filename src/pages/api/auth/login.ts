@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { loginUser } from "@/services/auth.service";
 import { AppError } from "@/common/exceptions";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   if (req.method !== "POST") throw new AppError("Method not allowed", 405);
 
   const { identifier, password } = req.body;

@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
 import {
@@ -12,7 +12,7 @@ import { CreateProductDto } from "@/dtos/request_dtos/product.dto";
  * - GET: Fetch history for multiple products (ids query param)
  * - POST: Create a new product
  */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   if (req.method === "GET") {
     const { ids } = req.query;
     if (!ids || typeof ids !== "string") {

@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { AppError } from "@/common/exceptions";
 
 const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
-const TOKEN_EXPIRES_IN = process.env.TOKEN_EXPIRES_IN || "1d";
 
 export async function loginUser(identifier: string, password: string) {
   const user = await prisma.user.findFirst({

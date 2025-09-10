@@ -4,13 +4,13 @@
 // - Upserts and returns summary {imported, updated, failed, errors}
 // =====================
 
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
 import { importProducts } from "@/services/product_import.service";
 import type { CreateProductDto } from "@/dtos/request_dtos/product.dto";
 
-async function handler(req: NextApiRequest, _res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   if (req.method !== "POST") throw new AppError("Method not allowed", 405);
 
   const body = req.body as unknown;

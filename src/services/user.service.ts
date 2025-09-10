@@ -4,6 +4,7 @@ import { CreateUserDto, UpdateUserDto } from "@/dtos/request_dtos/user.dto";
 import { UserResponse } from "@/dtos/response_dtos/user.response.dto";
 import { AppError } from "@/common/exceptions";
 import type { User, Role } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
 
@@ -61,7 +62,7 @@ export async function getUserById(id: number): Promise<UserResponse | null> {
 export async function updateUser(id: number, data: UpdateUserDto): Promise<UserResponse> {
   // Uniqueness check for username/email
   if (data.username || data.email) {
-    const or: any[] = [];
+    const or: Prisma.UserWhereInput[] = [];
     if (data.username) or.push({ username: data.username });
     if (data.email) or.push({ email: data.email });
 

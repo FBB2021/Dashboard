@@ -4,7 +4,7 @@
 // - Parses and returns CreateProductDto[] (no DB writes)
 // =====================
 
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
 import formidable, { type File } from "formidable"; // using our shim
@@ -39,7 +39,7 @@ async function parseForm(req: NextApiRequest): Promise<{ file?: File }> {
   });
 }
 
-async function handler(req: NextApiRequest, _res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   if (req.method !== "POST") throw new AppError("Method not allowed", 405);
 
   const { file } = await parseForm(req);

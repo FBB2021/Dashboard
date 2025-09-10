@@ -235,9 +235,6 @@ export default function ImportModal({
 
   const removeItem = (id: string) => setItems((cur) => cur.filter((it) => it.id !== id));
 
-  const totalDays = (it: CreateProductDto) =>
-    new Set([...(it.procurements ?? []).map((d) => d.day), ...(it.sales ?? []).map((d) => d.day)]).size;
-
   // ---------- Commit import ----------
   const handleImport = async () => {
     setError(null);

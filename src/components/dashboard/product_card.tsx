@@ -62,7 +62,7 @@ function CustomTooltip({ active, payload, label }: any) {
 // =====================
 export default function ProductCard({ productId, productName }: { productId: string; productName: string }) {
   const { data, isLoading, isError } = useProductHistory(productId);
-  const series = data?.history ?? [];
+  const series = useMemo(() => data?.history ?? [], [data?.history]);
 
   const kpis = useMemo(() => {
     const inv = series.at(-1)?.inventory ?? 0;

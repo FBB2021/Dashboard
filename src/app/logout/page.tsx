@@ -29,8 +29,14 @@ export default function LogoutPage() {
           router.replace(nextUrl);
           router.refresh();
         }, 1200);
-      } catch (e: any) {
-        setErr(e?.message || "Logout failed");
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          setErr(e.message);
+        } else if (typeof e === "string") {
+          setErr(e);
+        } else {
+          setErr("Logout failed");
+        }
       }
     })();
   }, [router, nextUrl]);

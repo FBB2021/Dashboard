@@ -12,7 +12,6 @@ import {
 // =====================
 // UI helpers
 // =====================
-const cn = (...a: (string | false | undefined)[]) => a.filter(Boolean).join(" ");
 
 /** Simple avatar using product initial */
 function ProductAvatar({ name }: { name: string }) {

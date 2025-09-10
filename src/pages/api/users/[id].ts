@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { getUserById, updateUser, deleteUser } from "@/services/user.service";
 import { UpdateUserDto } from "@/dtos/request_dtos/user.dto";
 import { withErrorHandling } from "@/common/api_handler";
@@ -11,7 +11,7 @@ import { withRole } from "@/common/auth/authorize";
  * - PUT: Update a user by ID
  * - DELETE: Remove a user by ID
  */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   const { id } = req.query;
 
   if (!id || Array.isArray(id)) {

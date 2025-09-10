@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
 import {
@@ -14,7 +14,7 @@ import { UpdateProductDto } from "@/dtos/request_dtos/product.dto";
  * - PUT: Update product (name, openingInventory)
  * - DELETE: Remove product (and related procurement/sales)
  */
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest) {
   const { id } = req.query;
 
   if (!id || Array.isArray(id)) {
