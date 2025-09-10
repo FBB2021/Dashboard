@@ -10,4 +10,4 @@ export interface JwtPayload {
 }
 
 export type AuthedRequest = NextApiRequest & { user?: JwtPayload };
-export type AuthedHandler = (req: AuthedRequest, res: NextApiResponse) => any;
+export type AuthedHandler = (req: AuthedRequest, res: NextApiResponse) => void | Promise<void>;

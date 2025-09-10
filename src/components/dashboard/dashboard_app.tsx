@@ -180,7 +180,7 @@ export default function DashboardApp() {
   // Dashboard data (series/KPIs/Top sellers)
   const { kpis, topSelling, isLoading, isError, error } = useDashboardData({
     products: selected,
-    range: toApiRange(range) as any,
+    range: toApiRange(range),
     top: String(topN),
     topBy,
   });
@@ -360,7 +360,7 @@ export default function DashboardApp() {
           <section className="mt-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-rose-100">
             <div className="text-sm text-rose-600 font-medium">Failed to load data</div>
             <div className="text-xs text-rose-500 mt-1">
-              {String((error as any)?.message || "Unknown error")}
+              {error instanceof Error ? error.message : "Unknown error"}
             </div>
           </section>
         )}

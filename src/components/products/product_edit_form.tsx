@@ -6,7 +6,10 @@ import { useRouter } from "next/navigation";
 import { Save, Plus, ArrowLeft, AlertCircle } from "lucide-react";
 
 type DayRow = { day: number; pQty: number; pPrice: number; sQty: number; sPrice: number; };
-const num = (v: any, d = 0) => { const n = Number(v); return Number.isFinite(n) ? n : d; };
+const num = (v: unknown, d = 0): number => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : d;
+};
 
 function makeRows(
   proc: { day: number; qty: number; price: number }[],
@@ -103,7 +106,8 @@ export default function ProductEditForm({
 
       {mode === "edit" && isError && (
         <div className="mt-4 flex items-center gap-2 rounded-lg bg-rose-50 p-3 text-rose-700 text-sm">
-          <AlertCircle className="h-4 w-4" /> Failed to load product: {String((error as any)?.message || "Unknown")}
+          <AlertCircle className="h-4 w-4" /> 
+          Failed to load product: {error instanceof Error ? error.message : "Unknown"}
         </div>
       )}
 

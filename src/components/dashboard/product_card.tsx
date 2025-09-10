@@ -24,32 +24,72 @@ const compact = (n: number) =>
 const currency = (n: number) =>
   new Intl.NumberFormat(undefined, { style: "currency", currency: "AUD", maximumFractionDigits: 0 }).format(n);
 
-function CustomTooltip({ active, payload, label }: any) {
-  if (!active || !payload?.length) return null;
-  const byKey = Object.fromEntries(payload.map((p: any) => [p.dataKey, p]));
+type MinimalTooltipPayload = {
+  dataKey?: string | number;
+  value?: number;
+  color?: string;
+};
+
+type MinimalTooltipProps = {
+  active?: boolean;
+  payload?: MinimalTooltipPayload[];
+  label?: string | number;
+};
+
+function CustomTooltip({ active, payload, label }: MinimalTooltipProps) {
+  if (!active || !payload || payload.length === 0) return null;
+
+  // Build a lookup by dataKey ("inventory" | "procurementAmount" | "salesAmount")
+  const byKey = Object.fromEntries(
+    payload
+      .filter((p) => typeof p.dataKey === "string")
+      .map((p) => [
+        p.dataKey as string,
+        {
+          color: p.color as string | undefined,
+          value: (p.value as number) ?? 0,
+        },
+      ])
+  ) as Record<string, { color?: string; value: number }>;
+
   return (
     <div className="rounded-xl bg-white p-3 shadow-xl ring-1 ring-slate-100">
       <div className="text-xs text-slate-500 mb-1">Day {label}</div>
       <div className="text-[13px] space-y-1">
         {byKey.inventory && (
           <div className="flex items-center gap-2">
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: byKey.inventory.color }} />
+            <span
+              className="inline-block h-2.5 w-2.5 rounded-full"
+              style={{ background: byKey.inventory.color }}
+            />
             <span className="text-slate-600">Inventory</span>
-            <span className="font-medium text-slate-900 ml-auto">{compact(byKey.inventory.value)}</span>
+            <span className="font-medium text-slate-900 ml-auto">
+              {compact(byKey.inventory.value)}
+            </span>
           </div>
         )}
         {byKey.procurementAmount && (
           <div className="flex items-center gap-2">
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: byKey.procurementAmount.color }} />
+            <span
+              className="inline-block h-2.5 w-2.5 rounded-full"
+              style={{ background: byKey.procurementAmount.color }}
+            />
             <span className="text-slate-600">Procurement</span>
-            <span className="font-medium text-slate-900 ml-auto">{currency(byKey.procurementAmount.value)}</span>
+            <span className="font-medium text-slate-900 ml-auto">
+              {currency(byKey.procurementAmount.value)}
+            </span>
           </div>
         )}
         {byKey.salesAmount && (
           <div className="flex items-center gap-2">
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: byKey.salesAmount.color }} />
+            <span
+              className="inline-block h-2.5 w-2.5 rounded-full"
+              style={{ background: byKey.salesAmount.color }}
+            />
             <span className="text-slate-600">Sales</span>
-            <span className="font-medium text-slate-900 ml-auto">{currency(byKey.salesAmount.value)}</span>
+            <span className="font-medium text-slate-900 ml-auto">
+              {currency(byKey.salesAmount.value)}
+            </span>
           </div>
         )}
       </div>

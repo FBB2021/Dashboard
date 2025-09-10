@@ -1,4 +1,4 @@
-import type { NextApiRequest } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getUsers, createUser } from "@/services/user.service";
 import { withErrorHandling } from "@/common/api_handler";
 import { AppError } from "@/common/exceptions";
@@ -10,16 +10,20 @@ import { withRole } from "@/common/auth/authorize";
  * - GET: Fetch all users
  * - POST: Create a new user
  */
-async function handler(req: NextApiRequest) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    return await getUsers();
+    const users = await getUsers();
+    return res.status(200).json(users);
   }
 
   if (req.method === "POST") {
-    return await createUser(req.body);
+    const newUser = await createUser(req.body);
+    return res.status(201).json(newUser);
   }
 
   throw new AppError("Method not allowed", 405);
 }
 
-export default withErrorHandling(withAuth(withRole("ADMIN")(handler)));
+export default withErrorHandling(
+  withAuth(withRole("ADMIN")(handler))
+);

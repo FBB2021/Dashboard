@@ -149,7 +149,9 @@ export default function ProductsTable() {
         <div className="relative">
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) =>
+              setSortBy(e.target.value as "name-asc" | "name-desc" | "id-asc" | "id-desc")
+            }
             className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
             title="Sort"
           >
@@ -174,7 +176,7 @@ export default function ProductsTable() {
         <div className="mt-4 flex items-center gap-2 rounded-lg bg-rose-50 p-3 text-rose-700">
           <AlertCircle className="h-4 w-4" />
           <span>
-            Failed to load products: {String((error as any)?.message || "Unknown error")}
+            Failed to load products: {error instanceof Error ? error.message : "Unknown error"}
           </span>
         </div>
       )}
