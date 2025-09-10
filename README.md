@@ -141,7 +141,7 @@ src/
 
 ### 1. Clone the Repository
 ```
-git clone <your-repo-url>
+git clone [<repo_url>](https://github.com/FBB2021/Dashboard.git)
 cd data-visualisation-dashboard
 ```
 ### 2. Install Dependencies
