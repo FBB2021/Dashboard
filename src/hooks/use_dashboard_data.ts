@@ -34,7 +34,7 @@ export type DashboardResponse = {
 export type RangeKey = "week" | "month" | "year" | "custom";
 
 export interface UseDashboardParams {
-  products: string[];                 // 为空 = 全部产品
+  products: string[];                 // empty = All products
   range?: RangeKey;
   from?: string;
   to?: string;
@@ -60,7 +60,7 @@ export function useDashboardData({
   top,
   topBy,
 }: UseDashboardParams) {
-  // 为空则不带 products 参数 -> 后端统计全部
+  // If empty, omit the products parameter -> Backend statistics for all
   const qs = toQuery({
     products: products?.length ? products.join(",") : undefined,
     range,
@@ -71,7 +71,7 @@ export function useDashboardData({
     topBy,
   });
 
-  // 永远发请求（即使未选择产品）
+  // Always send requests (even if no product is selected)
   const key = `/api/admin/dashboard?${qs}`;
 
   const swr = useSWR<DashboardResponse>(key, swrFetcher as any, {

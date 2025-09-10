@@ -12,7 +12,7 @@ export function withAuth(handler: AuthedHandler): AuthedHandler {
     try {
       const SECRET = process.env.JWT_SECRET || "supersecretkey";
       const payload = jwt.verify(token, SECRET) as JwtPayload;
-      req.user = payload; // ✅ 注入 user
+      req.user = payload; // Inject user
       return handler(req, res);
     } catch {
       throw new AppError("Unauthorized", 401);

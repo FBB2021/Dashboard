@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
     const router = useRouter();
-    const sp = useSearchParams();                   // sp 可能为 null
+    const sp = useSearchParams();                   // sp might be null
     const nextUrl = sp?.get("next") ?? "/dashboard";
 
     const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ export default function LoginPage() {
     setSubmitting(true);
     setError(null);
     try {
-        // ① 用后端要求的字段名登录（identifier + password）
+        // ① Login with backend API requirements（identifier + password）
         const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -35,7 +35,7 @@ export default function LoginPage() {
         const token = json?.data?.token;
         if (!token) throw new Error("Missing token from server");
 
-        // ② 让 Next 的 API 把 token 写入 HttpOnly Cookie（安全）
+        // ② Use Next API to push token into HttpOnly Cookie
         const setRes = await fetch("/api/auth/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,7 +47,7 @@ export default function LoginPage() {
         throw new Error(j?.message || "Failed to persist session");
         }
 
-        // ③ 跳转
+        // ③ Redirect
         router.replace(nextUrl);
         router.refresh();
     } catch (err: any) {
@@ -59,24 +59,28 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* 顶部留白标题，可按需删掉 */}
+      {/* Title */}
       <div className="max-w-[120rem] mx-auto px-4 py-6 text-slate-400 text-sm">
         AI Build - Smart Dashboard
       </div>
 
-      {/* 画布区域：左图右卡片的感觉（无素材时用渐变做占位） */}
+      {/* 
+        Canvas area: Left image, right card layout
+        (use gradient as placeholder when no assets are available) 
+      */}
+
       <div className="max-w-[120rem] mx-auto px-4 pb-16">
         <div className="rounded-3xl bg-white/60 ring-1 ring-slate-100 p-6 md:p-10">
           <div className="relative h-[520px] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 to-sky-800">
-            {/* 背景图（可替换为 /public/login-hero.jpg） */}
+            {/* Background（ /public/login-hero.jpg） */}
             <div
               className="absolute inset-0 bg-cover bg-center opacity-60"
               style={{ backgroundImage: "url('/login-hero.jpg')" }}
             />
-            {/* 遮罩以接近你给的设计 */}
+            {/* Mask based on Figma Design */}
             <div className="absolute inset-0 bg-slate-900/20" />
 
-            {/* 登录卡片 */}
+            {/* Login Card */}
             <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 w-full max-w-md">
               <div className="mx-auto rounded-xl bg-white shadow-xl ring-1 ring-slate-200 p-6">
                 <p className="text-[10px] tracking-wider text-slate-400 mb-1">
@@ -174,7 +178,7 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
-          {/* 可选：页面底部留白 */}
+          {/* bottom */}
         </div>
       </div>
     </div>

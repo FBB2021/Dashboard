@@ -365,7 +365,7 @@ export default function DashboardApp() {
           </section>
         )}
 
-        {/* Product cards list — 与上方左列同宽（8/4 栏） */}
+        {/* Product cards list — Same width as the left column above (8/4 columns) */}
         <section className="mt-4 grid grid-cols-1 xl:grid-cols-12 gap-4">
           <div className="xl:col-span-8 space-y-4">
             {selected.map((id) => (

@@ -13,18 +13,18 @@ export default function LogoutPage() {
   useEffect(() => {
     (async () => {
       try {
-        // 1) 让后端清理 httpOnly cookie
+        // 1) Clear the httpOnly cookie
         await fetch("/api/auth/session", { method: "DELETE", credentials: "include" });
-        // 2) 客户端兜底：清理可访问存储
+        // 2) Client-side fallback: Clear accessible storage
         try {
           localStorage.removeItem("token");
         } catch {}
-        // 删除可写 cookie（httpOnly 无法在前端删，由 API 完成）
+        // Delete writable cookies 
         document.cookie = "token=; Path=/; Max-Age=0";
         document.cookie = "refreshToken=; Path=/; Max-Age=0";
 
         setDone(true);
-        // 1.2s 后跳转（给个视觉反馈）
+        // 1.2-second delay before transition (provide visual feedback)
         setTimeout(() => {
           router.replace(nextUrl);
           router.refresh();
