@@ -92,7 +92,7 @@ Email: f.bao86@outlook.com
 - **TypeScript** — Type-safe development
 
 ## 📂 Project Structure
-
+```
 src/
 ├─ app/                     # Next.js App Router pages
 │  ├─ (private)/            # Auth-protected routes
@@ -134,6 +134,7 @@ src/
 ├─ types/                   # TypeScript type definitions
 │
 └─ utils/                   # Utility functions (date formatter, Excel parser, etc.)
+```
 
 ## ⚙️ Getting Started
 
