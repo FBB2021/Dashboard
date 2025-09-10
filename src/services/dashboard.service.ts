@@ -51,7 +51,9 @@ function currentInventory(p: {
   return p.openingInventory + proc - sold;
 }
 
-/** 仅负责数量类 KPI：产品数 / 低库存数 / 缺货数 */
+/** Responsible solely for quantitative KPIs: 
+ * Product count / Low inventory count / Out-of-stock count
+ * */
 export async function getDashboardKpis(params: DashboardParams): Promise<DashboardCounts> {
   const { productIds, lowStock = 10 } = params || {};
   const whereProduct = productIds?.length ? { id: { in: productIds } } : {};
