@@ -4,6 +4,7 @@ A web-based dashboard system for analysing **procurement, sales, and inventory h
 This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
 
 Author: Feng Bao
+
 Email: f.bao86@outlook.com
 
 ---
@@ -92,7 +93,7 @@ Email: f.bao86@outlook.com
 - **TypeScript** — Type-safe development
 
 ## 📂 Project Structure
-
+```
 src/
 ├─ app/                     # Next.js App Router pages
 │  ├─ (private)/            # Auth-protected routes
@@ -134,28 +135,28 @@ src/
 ├─ types/                   # TypeScript type definitions
 │
 └─ utils/                   # Utility functions (date formatter, Excel parser, etc.)
+```
 
 ## ⚙️ Getting Started
 
 ### 1. Clone the Repository
-
-git clone <your-repo-url>
-cd data-visualisation-dashboard
-
+```
+git clone https://github.com/FBB2021/Dashboard.git
+cd Dashboard
+```
 ### 2. Install Dependencies
-
+```
 npm install
-
+```
 ### 3. Launch project
-
-npm install
+```
 npm run dev
-
+```
 ### 4. Testing users
-
+```
 - Admin user: admin@example.com | admin123
 - General user: demo@example.com | user123
-
+```
 ---
 
 ✅ That's it
