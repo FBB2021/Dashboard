@@ -1,4 +1,3 @@
-// src/hooks/useDashboardData.ts
 import useSWR from "swr";
 import { swrFetcher } from "@/lib/api-client";
 
@@ -14,20 +13,34 @@ export type Kpi = {
   procurementTotal: number;     // sum over period
   salesTotal: number;           // sum over period
   activeUsers: number;
+  productCount: number;
+  lowStockCount: number;
+  outOfStockCount: number;
+};
+
+export type TopSeller = {
+  id: string;
+  name: string;
+  qty: number;
+  amount: number;
 };
 
 export type DashboardResponse = {
   series: DayPoint[];
   kpis?: Kpi;
+  topSelling?: TopSeller[];
 };
 
 export type RangeKey = "week" | "month" | "year" | "custom";
 
 export interface UseDashboardParams {
-  products: string[];
+  products: string[];                 // 为空 = 全部产品
   range?: RangeKey;
   from?: string;
   to?: string;
+  lowStock?: number | string;
+  top?: number | string;
+  topBy?: "amount" | "qty";
 }
 
 function toQuery(params: Record<string, string | undefined>) {
@@ -38,26 +51,35 @@ function toQuery(params: Record<string, string | undefined>) {
   return usp.toString();
 }
 
-export function useDashboardData({ products, range = "week", from, to }: UseDashboardParams) {
-  const hasProducts = products && products.length > 0;
-
+export function useDashboardData({
+  products,
+  range = "week",
+  from,
+  to,
+  lowStock,
+  top,
+  topBy,
+}: UseDashboardParams) {
+  // 为空则不带 products 参数 -> 后端统计全部
   const qs = toQuery({
-    products: hasProducts ? products.join(",") : undefined,
+    products: products?.length ? products.join(",") : undefined,
     range,
     from,
     to,
+    lowStock: lowStock?.toString(),
+    top: top?.toString(),
+    topBy,
   });
 
-  const key = hasProducts ? `/api/admin/dashboard?${qs}` : null;
+  // 永远发请求（即使未选择产品）
+  const key = `/api/admin/dashboard?${qs}`;
 
-  // v1/v2 兼容：不直接解构 isLoading（v1 没有）
   const swr = useSWR<DashboardResponse>(key, swrFetcher as any, {
     revalidateOnFocus: false,
   } as any);
 
   const { data, error, mutate } = swr;
 
-  // 在 v2 有 isLoading；v1 用 !data && !error 推断
   const isLoading: boolean =
     typeof (swr as any).isLoading === "boolean"
       ? (swr as any).isLoading
@@ -66,6 +88,7 @@ export function useDashboardData({ products, range = "week", from, to }: UseDash
   return {
     series: data?.series ?? [],
     kpis: data?.kpis,
+    topSelling: data?.topSelling ?? [],
     isLoading,
     isError: Boolean(error),
     error,
