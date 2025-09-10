@@ -336,12 +336,12 @@ export default function UsersPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <button
+        {/* <button
           onClick={() => {}}
           className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
         >
           Search
-        </button>
+        </button> */}
       </div>
 
       {/* Subheader: results + controls */}

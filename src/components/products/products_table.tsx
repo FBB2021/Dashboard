@@ -163,9 +163,9 @@ export default function ProductsTable() {
         </div>
 
         {/* Date (placeholder) */}
-        <button className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm hover:bg-slate-50 flex items-center gap-2">
+        {/* <button className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm hover:bg-slate-50 flex items-center gap-2">
           <Calendar className="h-4 w-4" /> All time
-        </button>
+        </button> */}
       </div>
 
       {/* Meta */}

@@ -136,9 +136,9 @@ export default function LoginPage({ nextUrl }: { nextUrl: string }) {
                       Remember me
                     </label>
 
-                    <a href="/forgot-password" className="hover:underline">
+                    {/* <a href="/forgot-password" className="hover:underline">
                       Forgot Password?
-                    </a>
+                    </a> */}
                   </div>
 
                   {/* Error */}
@@ -158,12 +158,12 @@ export default function LoginPage({ nextUrl }: { nextUrl: string }) {
                   </button>
                 </form>
 
-                <div className="mt-6 text-[11px] text-slate-600 text-center">
+                {/* <div className="mt-6 text-[11px] text-slate-600 text-center">
                   New User?{" "}
                   <a href="/signup" className="font-medium underline">
                     SIGN UP HERE
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

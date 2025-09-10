@@ -250,9 +250,9 @@ export default function DashboardApp() {
             </div>
 
             {/* Placeholder filter */}
-            <button className="rounded-xl border border-slate-200 bg-white p-2 hover:bg-slate-50">
+            {/* <button className="rounded-xl border border-slate-200 bg-white p-2 hover:bg-slate-50">
               <Filter className="h-4 w-4 text-slate-600" />
-            </button>
+            </button> */}
           </div>
         </header>
 

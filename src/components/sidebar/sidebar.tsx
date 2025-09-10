@@ -101,10 +101,10 @@ export default function Sidebar() {
 
       {/* Bottom actions */}
       <div className="mt-auto rounded-2xl bg-white ring-1 ring-slate-100 p-2 shadow-sm">
-        <Link href="/support" className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-50">
+        {/* <Link href="/support" className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-50">
           <span className="text-slate-400"><HelpCircle size={18} /></span>
           <span className="font-medium">Support</span>
-        </Link>
+        </Link> */}
         <Link href="/logout" className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-700 hover:bg-slate-50">
           <span className="text-slate-400"><LogOut size={18} /></span>
           <span className="font-medium">Sign Out</span>
