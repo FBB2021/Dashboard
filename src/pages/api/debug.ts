@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || "❌ missing",
       userCount: await prisma.user.count().catch(() => "⚠️ db not connected"),
     });
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
+  } catch (err: unknown) {
+    res.status(500).json({ error: err });
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { X, Search, Filter, Calendar, LayoutDashboard } from "lucide-react";
+import { X, Search, Calendar, LayoutDashboard } from "lucide-react";
 import ProductCard from "./product_card";
 import { useProductsList } from "@/hooks/use_products_list";
 import { useDashboardData } from "@/hooks/use_dashboard_data";

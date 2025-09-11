@@ -6,7 +6,7 @@ import { useProductsList } from "@/hooks/use_products_list";
 import type { ProductBasic } from "@/dtos/response_dtos/product.response.dto";
 import ImportModal from "@/components/products/products_import_modal";
 import {
-  Search, Upload, Calendar, Pencil, Trash, AlertCircle, ChevronDown, Plus
+  Search, Upload, Pencil, Trash, AlertCircle, ChevronDown, Plus
 } from "lucide-react";
 
 // =====================

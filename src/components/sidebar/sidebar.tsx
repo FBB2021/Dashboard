@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, User, HelpCircle, LogOut, Settings, Menu } from "lucide-react";
+import { LayoutDashboard, Package, User, LogOut, Settings, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Utility: combine classNames
