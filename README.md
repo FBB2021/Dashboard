@@ -3,19 +3,17 @@
 A web-based dashboard system for analysing **procurement, sales, and inventory history** of products.
 This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
 
-## Documentation & Design
-
-- **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
-- **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
-- **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)  
-
----
 ## Author
 
 - **Name:** Feng Bao  
 - **Email:** [f.bao86@outlook.com](mailto:f.bao86@outlook.com)  
 - **LinkedIn:** <https://www.linkedin.com/in/fbb1>
----
+
+## Documentation & Design
+
+- **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
+- **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
+- **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)  
 
 ## Live Demo
 
@@ -37,8 +35,6 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
   | Viewer | viewer@example.com      | 123456   |
   
   > Tip: After login you’ll be redirected to `/dashboard`.  
-
----
 
 ## Features
 
@@ -77,8 +73,6 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
   - Role-based Access Control (RBAC):
     - Regular users can manage product inventory
     - Admin users can additionally manage users
-
----
 
 ### 🔹 Non-functional Improvements
 
