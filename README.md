@@ -3,20 +3,14 @@
 A web-based dashboard system for analysing **procurement, sales, and inventory history** of products.
 This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
 
-- **Author:**
+## 👤 Author
 
-  Feng Bao
-  
-- **Email:**
-
-  f.bao86@outlook.com
-
-- **LinkedIn:**
-
-  <https://www.linkedin.com/in/fbb1>
+- **Name:** Feng Bao  
+- **Email:** [f.bao86@outlook.com](mailto:f.bao86@outlook.com)  
+- **LinkedIn:** <https://www.linkedin.com/in/fbb1>
 ---
 
-# 🌐 Live Demo
+## 🌐 Live Demo
 
 - **App (Prod):**  
   <https://main.djdzb40a8m63f.amplifyapp.com>
@@ -27,7 +21,7 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 - **Web App Health Check:**  
   (GET) <https://main.djdzb40a8m63f.amplifyapp.com/api/health>
 
-## 🔐 Demo Accounts
+### 🔐 Demo Accounts
 
 | Role   | Username                | Password |
 |--------|-------------------------|----------|
