@@ -13,7 +13,8 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 
 - **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
 - **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
-- **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)  
+- **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)
+- **Postman Collections:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YzM2Y2E4MThlODY4NDlkYjllMzY3Njg1OTFmN2EyMzU)  
 
 ## Live Demo
 
@@ -167,24 +168,56 @@ Import flow: /pages/api/products/import handles uploads & batch ingestion, typic
 
 ## Getting Started
 
-### 1. Clone the Repository
-```
+## 1. Clone the Repository
+```bash
 git clone https://github.com/FBB2021/Dashboard.git
 cd Dashboard
 ```
-### 2. Install Dependencies
-```
+
+## 2. Install Dependencies
+```bash
 npm install
 ```
-### 3. Launch project
+
+## 3. Configure Environment Variables
+Create a `.env` file in the project root with the following values (update `DATABASE_URL` to your own RDS/MySQL instance):
+
+```env
+# Database connection (MySQL on RDS or local MySQL)
+DATABASE_URL="mysql://<username>:<password>@<host>:3306/dashboard"
+
+# Security
+BCRYPT_SALT_ROUNDS=10
+JWT_SECRET=supersecretkey
+
+# Seed users (initial accounts created when seeding the DB)
+SEED_ADMIN_USERNAME=admin
+SEED_ADMIN_EMAIL=admin@example.com
+SEED_ADMIN_PASSWORD=admin123
+
+SEED_USER_USERNAME=demo
+SEED_USER_EMAIL=demo@example.com
+SEED_USER_PASSWORD=user123
+
+# API Base URL (used in frontend fetch calls)
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
 ```
+
+## 4. Initialize Database
+```bash
+# Run Prisma migrations
+npx prisma migrate dev
+
+# Seed the database with default users/roles
+npx prisma db seed
+```
+
+## 5. Launch Project
+```bash
 npm run dev
 ```
-### 4. Testing users
-```
-- Admin user: admin@example.com | admin123
-- General user: demo@example.com | user123
-```
+App runs on: <http://localhost:3000>
+
 ---
 
 That's it
