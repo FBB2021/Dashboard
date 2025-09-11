@@ -26,6 +26,10 @@ export async function api<T = unknown>(
   const base = process.env.NEXT_PUBLIC_API_BASE_URL || "";
   const url = joinURL(base, path);
 
+  /** Debug */
+  console.log("API base:", base);
+  console.log("Request URL:", url);
+
   const res = await fetch(url, {
     credentials: "include",                        // send cookies (JWT in cookie)
     headers: {
