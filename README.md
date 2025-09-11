@@ -220,7 +220,7 @@ App runs on: <http://localhost:3000>
 
 ---
 
-That's it
+That's it.
 
 This project demonstrates a complete end-to-end solution for data import, visualisation, and management.
 Thank you for your time and consideration.
