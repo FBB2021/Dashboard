@@ -29,11 +29,10 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 
 ### 3.1. Demo Accounts
 
-  | Role   | Username                | Password |
+  | Role   | Email                | Password |
   |--------|-------------------------|----------|
-  | Admin  | admin@example.com       | 123456   |
-  | Editor | editor@example.com      | 123456   |
-  | Viewer | viewer@example.com      | 123456   |
+  | Admin  | admin@example.com       | admin123   |
+  | General User | demo@example.com      | user123   |
   
   > Tip: After login you’ll be redirected to `/dashboard`.  
 
