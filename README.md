@@ -4,12 +4,15 @@ A web-based dashboard system for analysing **procurement, sales, and inventory h
 This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
 
 - **Author:**
+
   Feng Bao
   
 - **Email:**
+
   f.bao86@outlook.com
 
 - **LinkedIn:**
+
   <https://www.linkedin.com/in/fbb1>
 ---
 
