@@ -29,13 +29,13 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 
 ### 🔐 Demo Accounts
 
-| Role   | Username                | Password |
-|--------|-------------------------|----------|
-| Admin  | admin@example.com       | 123456   |
-| Editor | editor@example.com      | 123456   |
-| Viewer | viewer@example.com      | 123456   |
-
-> Tip: After login you’ll be redirected to `/dashboard`.  
+  | Role   | Username                | Password |
+  |--------|-------------------------|----------|
+  | Admin  | admin@example.com       | 123456   |
+  | Editor | editor@example.com      | 123456   |
+  | Viewer | viewer@example.com      | 123456   |
+  
+  > Tip: After login you’ll be redirected to `/dashboard`.  
 
 ---
 
