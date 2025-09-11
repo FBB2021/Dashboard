@@ -3,6 +3,12 @@
 A web-based dashboard system for analysing **procurement, sales, and inventory history** of products.
 This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
 
+## 📖 Documentation & Design
+
+- **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
+- **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
+
+---
 ## 👤 Author
 
 - **Name:** Feng Bao  
