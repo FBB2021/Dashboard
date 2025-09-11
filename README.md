@@ -14,7 +14,8 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 - **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
 - **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
 - **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)
-- **Postman Collections:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YzM2Y2E4MThlODY4NDlkYjllMzY3Njg1OTFmN2EyMzU)  
+- **Postman Collections:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YzM2Y2E4MThlODY4NDlkYjllMzY3Njg1OTFmN2EyMzU)
+- **Cloud Architecture Design: Assumptions and Cost Estimation:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YzM2Y2E4MThlODY4NDlkYjllMzY3Njg1OTFmN2EyMzU)
 
 ## 3. Live Demo
 
