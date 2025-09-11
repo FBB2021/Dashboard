@@ -17,8 +17,8 @@ Email: f.bao86@outlook.com
 - **API Base:**  
   <https://main.djdzb40a8m63f.amplifyapp.com/api>
 
-- **Web App Health Check (GET):**  
-  <https://main.djdzb40a8m63f.amplifyapp.com/api/health>
+- **Web App Health Check:**  
+  (GET) <https://main.djdzb40a8m63f.amplifyapp.com/api/health>
 
 ## 🔐 Demo Accounts
 
