@@ -9,6 +9,24 @@ Email: f.bao86@outlook.com
 
 ---
 
+# 🌐 Live Demo
+
+- **App (Prod):** https://main.djdzb40a8m63f.amplifyapp.com
+- **API Base:** https://main.djdzb40a8m63f.amplifyapp.com)/api
+- **Web App Health Check:** GET https://main.djdzb40a8m63f.amplifyapp.com/api/health
+
+## 🔐 Demo Accounts
+
+| Role   | Username                | Password |
+|--------|-------------------------|----------|
+| Admin  | admin@example.com       | 123456   |
+| Editor | editor@example.com      | 123456   |
+| Viewer | viewer@example.com      | 123456   |
+
+> Tip: After login you’ll be redirected to `/dashboard`.  
+
+---
+
 ## 🚀 Features
 
 ### 🔹 Core Features
@@ -78,14 +96,13 @@ Email: f.bao86@outlook.com
 
 ### 🔹 Database
 
-- **SQLite (dev)** — Lightweight local database for prototyping
-- **MySQL / PostgreSQL (prod-ready)** — Prisma-supported relational DBs
+- **MySQL** — Eliable ACID relational DB with strong indexing/joins and a mature ecosystem, Prisma-ready for type-safe queries and easy migrations. Ideal for this project: clean product↔user↔order modeling, transactional Excel/CSV bulk imports, fast KPI/report queries (filters/totals/trends), easy scaling, and mature backups—fits seamlessly with Next.js API + Prisma.
 
 ### 🔹 Infrastructure & Deployment
 
-- **Vercel** (optional) — For fast frontend + backend hosting
-- **Docker** (optional) — Containerised local development
-
+- **AWS Amplify** — Zero-ops CI/CD and hosting for the web app; preview deployments, and HTTPS.
+- **Amazon RDS for MySQL** — Fully managed MySQL with Multi-AZ HA, automated backups, and point-in-time recovery.
+  
 ### 🔹 Tooling & Libraries
 
 - **xlsx** — Excel file parsing and validation
@@ -95,46 +112,50 @@ Email: f.bao86@outlook.com
 ## 📂 Project Structure
 ```
 src/
-├─ app/                     # Next.js App Router pages
-│  ├─ (private)/            # Auth-protected routes
-│  │  ├─ dashboard/         # Dashboard (summary board + charts)
-│  │  ├─ products/          # Product management
-│  │  │  ├─ new/            # Create product page
-│  │  │  └─ [id]/           # Product detail/edit page
-│  │  └─ users/             # User management
-│  ├─ login/                # Login page
-│  └─ logout/               # Logout page
-│
+├─ app/                                 # Next.js App Router (pages & layouts)
+│  ├─ (private)/                        # Auth-protected area (guarded by middleware/guards)
+│  │  ├─ dashboard/                     # Dashboard page (KPIs, charts)
+│  │  ├─ products/                      # Products module entry + child routes
+│  │  │  ├─ new/                        # Create product page
+│  │  │  └─ [id]/                       # Dynamic route: view/edit a specific product
+│  │  └─ users/                         # User management page (list/CRUD)
+│  ├─ login/                            # Login page (posts to /pages/api/auth)
+│  └─ logout/                           # Logout page (clears session then redirects)
 ├─ common/
-│  └─ auth/                 # Authentication helpers (RBAC, session utils)
-│
-├─ components/
-│  ├─ dashboard/            # Dashboard-specific UI components
-│  ├─ products/             # Product UI components (tables, forms, cards)
-│  └─ sidebar/              # Sidebar navigation component
-│
-├─ dtos/
-│  ├─ request_dtos/         # Data Transfer Objects for requests
-│  └─ response_dtos/        # Data Transfer Objects for API responses
-│
-├─ hooks/                   # Custom React hooks
-│
-├─ lib/                     # Shared libraries (Prisma client, configs)
-│
-├─ pages/
-│  └─ api/                  # Next.js API routes (backend logic)
-│      ├─ admin/            # Admin-related APIs (user management, RBAC)
-│      ├─ auth/             # Auth APIs (login, logout, session)
-│      ├─ products/         # Product APIs
-│      │  ├─ import/        # Excel import endpoint
-│      │  └─ [id]/          # Product detail API
-│      └─ users/            # User CRUD APIs
-│
-├─ services/                # Business logic (user service, product service)
-│
-├─ types/                   # TypeScript type definitions
-│
-└─ utils/                   # Utility functions (date formatter, Excel parser, etc.)
+│  └─ auth/                             # Shared auth helpers (cookie/token utilities, guards)
+├─ components/                          # Reusable UI components & page sections
+│  ├─ dashboard/                        # Dashboard-specific components (KPI cards, charts)
+│  ├─ products/                         # Product components (forms, tables, filters)
+│  └─ sidebar/                          # Sidebar navigation & layout shell
+├─ dtos/                                # Data Transfer Objects (types + mapping)
+│  ├─ request_dtos/                     # Request DTOs (form/input validation & types)
+│  └─ response_dtos/                    # Response DTOs (API response models)
+├─ hooks/                               # Custom React hooks (data fetching, form state, etc.)
+├─ lib/                                 # General libraries (Prisma, HTTP wrapper, helpers)
+├─ pages/                               # Next.js Pages Router (used here only for API routes)
+│  └─ api/                              # Serverless API endpoints (Node/Edge)
+│      ├─ admin/                        # Admin endpoints (stats, configs)
+│      ├─ auth/                         # Auth endpoints (login, logout, session check)
+│      ├─ products/                     # Product endpoints
+│      │  ├─ import/                    # Bulk import (e.g., Excel/CSV upload & processing)
+│      │  └─ [id]/                      # Product detail/update/delete (RESTful)
+│      └─ users/                        # User endpoints (list/create/update/delete)
+├─ services/                            # Business service layer (DB/third-party integrations)
+├─ types/                               # Global TypeScript types & enums (avoid cycles)
+└─ utils                                # Utility functions (formatting, dates, constants)
+
+Notes:
+
+Routing strategy: App UI uses app/ (App Router). Backend endpoints live under pages/api/ (serverless). They run side-by-side.
+
+Private area: Pages in app/(private) check auth (e.g., read a token or pass middleware) before render.
+
+DTOs & services: Components/pages depend on DTO types and the services layer instead of raw DB access to keep concerns clean.
+
+Dynamic routes: [id] folders indicate dynamic params (e.g., /products/123).
+
+Import flow: /pages/api/products/import handles uploads & batch ingestion, typically paired with a front-end upload form/drag-drop.
+
 ```
 
 ## ⚙️ Getting Started
