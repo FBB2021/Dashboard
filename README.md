@@ -3,20 +3,20 @@
 A web-based dashboard system for analysing **procurement, sales, and inventory history** of products.
 This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
 
-## Author
+## 1. Author
 
 - **Name:** Feng Bao  
 - **Email:** [f.bao86@outlook.com](mailto:f.bao86@outlook.com)  
 - **LinkedIn:** <https://www.linkedin.com/in/fbb1>
 
-## Documentation & Design
+## 2. Documentation & Design
 
 - **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
 - **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
 - **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)
 - **Postman Collections:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YzM2Y2E4MThlODY4NDlkYjllMzY3Njg1OTFmN2EyMzU)  
 
-## Live Demo
+## 3. Live Demo
 
 - **App (Prod):**  
   <https://main.djdzb40a8m63f.amplifyapp.com>
@@ -27,7 +27,7 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 - **Web App Health Check:**  
   (GET) <https://main.djdzb40a8m63f.amplifyapp.com/api/health>
 
-### Demo Accounts
+### 3.1. Demo Accounts
 
   | Role   | Username                | Password |
   |--------|-------------------------|----------|
@@ -37,9 +37,9 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
   
   > Tip: After login you’ll be redirected to `/dashboard`.  
 
-## Features
+## 4. Features
 
-### 🔹 Core Features
+### 4.1. Core Features
 
 - **User Authentication**
   - Basic login with username & password
@@ -55,7 +55,7 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
   - View multiple products on the same page (each with its own chart)
   - Time ranges: Week / Month / Year / Custom
 
-### 🔹 Additional Features
+### 4.2. Additional Features
 
 - **Summary Board**
   - Display key KPIs such as total products, procurement total, sales total, low stock count, and out-of-stock alerts
@@ -75,7 +75,7 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
     - Regular users can manage product inventory
     - Admin users can additionally manage users
 
-### 🔹 Non-functional Improvements
+### 4.3. Non-functional Improvements
 
 - **RBAC implementation** to ensure proper separation of privileges
 - **Layered backend architecture** (controllers, services,DTOs & converters) for better maintainability
@@ -85,7 +85,7 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
   - All endpoints return a consistent structure (`code`, `message`, `data`), improving client-side integration
   - Centralised API handler ensures uniform error handling, reduces boilerplate, and makes the backend more maintainable
 
-## Tech Stack
+## 5. Tech Stack
 
 ### 🔹 Frontend
 
@@ -117,7 +117,7 @@ This project was implemented as part of the *Coding Challenge – Data Visualisa
 - **ESLint + Prettier** — Code formatting & linting
 - **TypeScript** — Type-safe development
 
-## Project Structure
+## 6. Project Structure
 ```
 src/
 ├─ app/                                 # Next.js App Router (pages & layouts)
@@ -166,24 +166,24 @@ Import flow: /pages/api/products/import handles uploads & batch ingestion, typic
 
 ```
 
-## Getting Started
+## 7. Getting Started
 
-## 1. Clone the Repository
+### 7.1. Clone the Repository
 ```bash
 git clone https://github.com/FBB2021/Dashboard.git
 cd Dashboard
 ```
 
-## 2. Install Dependencies
+### 7.2. Install Dependencies
 ```bash
 npm install
 ```
 
-## 3. Configure Environment Variables
+### 7.3. Configure Environment Variables
 Create a `.env` file in the project root with the following values (update `DATABASE_URL` to your own RDS/MySQL instance):
 
 ```env
-# Database connection (MySQL on RDS or local MySQL)
+# Database connection (MySQL)
 DATABASE_URL="mysql://<username>:<password>@<host>:3306/dashboard"
 
 # Security
@@ -203,7 +203,7 @@ SEED_USER_PASSWORD=user123
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
 ```
 
-## 4. Initialize Database
+### 7.4. Initialize Database
 ```bash
 # Run Prisma migrations
 npx prisma migrate dev
@@ -212,7 +212,7 @@ npx prisma migrate dev
 npx prisma db seed
 ```
 
-## 5. Launch Project
+### 7.5. Launch Project
 ```bash
 npm run dev
 ```
