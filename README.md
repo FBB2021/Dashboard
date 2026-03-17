@@ -1,229 +1,154 @@
 # Data Visualisation Dashboard
 
-A web-based dashboard system for analysing **procurement, sales, and inventory history** of products.
-This project was implemented as part of the *Coding Challenge – Data Visualisation Dashboard*.
+A full-stack web dashboard for analysing product procurement, sales, and inventory trends.
 
-## 1. Author
+This project was built as an end-to-end data visualisation system that transforms Excel-based business records into structured, interactive insights. Users can upload procurement and sales data, validate records before import, and explore KPIs and trend charts through a clean dashboard interface.
 
-- **Name:** Feng Bao  
-- **Email:** [f.bao86@outlook.com](mailto:f.bao86@outlook.com)  
-- **LinkedIn:** <https://www.linkedin.com/in/fbb1>
+## Overview
 
-## 2. Documentation & Design
+In many small and medium-sized business scenarios, procurement, sales, and inventory data are often stored in spreadsheets, which makes long-term tracking and operational analysis difficult.
 
-- **User Stories:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/MjliYTMyODIzNzFhNDc4MTg2NDE0MTkxN2MxMzk0Zjk)  
-- **Figma Design:** [Figma Dashboard Prototype](https://www.figma.com/design/ZdjAZJQd1N7jm5LkZuaqhN/Dashboard?node-id=0-1&t=vA8f2zp4Zix01Miy-1)
-- **Database Schema:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YjRiZTJhYWQxZjMwNDI0NTg0YTM4MWE5N2IzOTEzMjY)
-- **Postman Collections:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/YzM2Y2E4MThlODY4NDlkYjllMzY3Njg1OTFmN2EyMzU)
-- **Cloud Architecture Design: Assumptions and Cost Estimation:** [Confluence Link](https://fbao860.atlassian.net/wiki/external/ODZkZDUzYzMyZWYxNDAwODkwODg3YmJhOTMyNmIxMjc)
+This dashboard solves that problem by providing a system where users can:
 
-## 3. Live Demo
+- upload Excel files containing procurement and sales history
+- validate and correct records before import
+- track inventory trends over time
+- compare procurement amount, sales amount, and stock movement
+- monitor warehouse and product-level KPIs through charts and summary cards
 
-- **App (Prod):**  
-  <https://main.djdzb40a8m63f.amplifyapp.com>
+## Key Highlights
 
-- **API Base:**  
-  <https://main.djdzb40a8m63f.amplifyapp.com/api>
+- Built a complete **full-stack dashboard** using Next.js, TypeScript, Prisma, and MySQL
+- Designed an **Excel import and validation workflow**, not just a simple file upload
+- Implemented **interactive time-series charts** for inventory, procurement amount, and sales amount
+- Added **role-based access control (RBAC)** with separate admin and general user permissions
+- Applied a **layered backend structure** with DTOs, services, and a centralised API response handler
+- Deployed the project using **AWS Amplify** and **Amazon RDS**
 
-- **Web App Health Check:**  
-  (GET) <https://main.djdzb40a8m63f.amplifyapp.com/api/health>
+## My Contribution
 
-### 3.1. Demo Accounts
+I designed and implemented the project end to end, including:
 
-  | Role   | Email                | Password |
-  |--------|-------------------------|----------|
-  | Admin  | admin@example.com       | admin123   |
-  | General User | demo@example.com      | user123   |
-  
-  > Tip: After login you’ll be redirected to `/dashboard`.  
+- frontend dashboard pages and reusable UI components
+- backend API routes and business logic
+- Prisma data model and MySQL schema
+- authentication and password encryption
+- role-based access control
+- Excel parsing, validation, preview, and batch import
+- KPI calculation and chart-ready data transformation
+- deployment setup and environment configuration
 
-## 4. Features
+## Features
 
-### 4.1. Core Features
+### Core Features
 
 - **User Authentication**
-  - Basic login with username & password
-  - Passwords are securely stored using bcrypt hashing
+  - Login with username/email and password
+  - Passwords securely stored using bcrypt hashing
+
 - **Excel Import**
-  - Upload Excel files containing product procurement & sales history
-  - Data automatically parsed and stored in the database
+  - Upload Excel files containing product procurement and sales history
+  - Parse and store data into the database
+
 - **Interactive Dashboard**
-  - Line chart with **3 curves per product**:
+  - Visualise product history with charts
+  - Each product includes:
     - Inventory over time
     - Procurement Amount (Qty × Price)
     - Sales Amount (Qty × Price)
-  - View multiple products on the same page (each with its own chart)
-  - Time ranges: Week / Month / Year / Custom
+  - Support for multiple products on the same page
+  - Time filters: Week / Month / Year / Custom
 
-### 4.2. Additional Features
+### Additional Features
 
 - **Summary Board**
-  - Display key KPIs such as total products, procurement total, sales total, low stock count, and out-of-stock alerts
-  - Users can quickly understand warehouse-wide or per-product status
+  - Display key KPIs such as:
+    - total products
+    - total procurement amount
+    - total sales amount
+    - low stock count
+    - out-of-stock alerts
+
 - **User Management**
-  - Admin can manage users within the system (create, update, delete)
-  - Full CRUD with search and sorting
+  - Admin can create, update, delete, search, and sort users
+
 - **Product Management**
   - Manage all products stored in the system
   - Full CRUD with search and sorting
+
 - **Excel Data Validation**
-  - Before importing, uploaded data can be previewed, checked, and corrected to avoid invalid entries
-- **Password Encryption**
-  - All user passwords are hashed before being saved
+  - Preview and validate uploaded data before importing
+  - Reduce invalid entries and improve data quality
+
 - **Multi-role Access Control**
-  - Role-based Access Control (RBAC):
-    - Regular users can manage product inventory
-    - Admin users can additionally manage users
+  - Regular users can manage product inventory
+  - Admin users can additionally manage users
 
-### 4.3. Non-functional Improvements
+## Tech Stack
 
-- **RBAC implementation** to ensure proper separation of privileges
-- **Layered backend architecture** (controllers, services,DTOs & converters) for better maintainability
-- **Coding style and conventions** enforced throughout the project
-- **Consistent API Design**
-  - Implemented a global API response wrapper to standardise success and error messages
-  - All endpoints return a consistent structure (`code`, `message`, `data`), improving client-side integration
-  - Centralised API handler ensures uniform error handling, reduces boilerplate, and makes the backend more maintainable
+### Frontend
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Recharts
 
-## 5. Tech Stack
+### Backend
+- Next.js API Routes
+- Prisma ORM
+- bcryptjs
+- Custom RBAC
+- Centralised API response handler
 
-### 🔹 Frontend
+### Database
+- MySQL
 
-- **Next.js (App Router)** — React framework for routing, SSR, and API endpoints
-- **React** — Component-based UI development
-- **Recharts** — Interactive charts for data visualisation
-- **TailwindCSS** — Utility-first CSS framework for responsive, clean UI
+### Infrastructure & Deployment
+- AWS Amplify
+- Amazon RDS for MySQL
 
-### 🔹 Backend
+### Tooling & Libraries
+- xlsx
+- ESLint
+- Prettier
 
-- **Next.js API Routes** — Used as lightweight backend endpoints
-- **Prisma ORM** — Database schema & queries
-- **bcryptjs** — Password hashing and secure authentication
-- **RBAC (Role-Based Access Control)** — Implemented custom roles (admin, user)
-- **Centralised API Handler** — Unified response format & error handling
+## Engineering Focus
 
-### 🔹 Database
+This project was built with maintainability and practical business use in mind. Key engineering considerations include:
 
-- **MySQL** — Eliable ACID relational DB with strong indexing/joins and a mature ecosystem, Prisma-ready for type-safe queries and easy migrations. Ideal for this project: clean product↔user↔order modeling, transactional Excel/CSV bulk imports, fast KPI/report queries (filters/totals/trends), easy scaling, and mature backups—fits seamlessly with Next.js API + Prisma.
+- clear separation between UI, API, services, and DTOs
+- consistent API response structure
+- secure password storage
+- validation before data persistence
+- relational schema suitable for transactional data and reporting
+- role separation for system administration and daily operations
 
-### 🔹 Infrastructure & Deployment
+## Live Demo
 
-- **AWS Amplify** — Zero-ops CI/CD and hosting for the web app; preview deployments, and HTTPS.
-- **Amazon RDS for MySQL** — Fully managed MySQL with Multi-AZ HA, automated backups, and point-in-time recovery.
-  
-### 🔹 Tooling & Libraries
+### App
+`https://main.djdzb40a8m63f.amplifyapp.com`
 
-- **xlsx** — Excel file parsing and validation
-- **ESLint + Prettier** — Code formatting & linting
-- **TypeScript** — Type-safe development
+### API Base
+`https://main.djdzb40a8m63f.amplifyapp.com/api`
 
-## 6. Project Structure
-```
-src/
-├─ app/                                 # Next.js App Router (pages & layouts)
-│  ├─ (private)/                        # Auth-protected area (guarded by middleware/guards)
-│  │  ├─ dashboard/                     # Dashboard page (KPIs, charts)
-│  │  ├─ products/                      # Products module entry + child routes
-│  │  │  ├─ new/                        # Create product page
-│  │  │  └─ [id]/                       # Dynamic route: view/edit a specific product
-│  │  └─ users/                         # User management page (list/CRUD)
-│  ├─ login/                            # Login page (posts to /pages/api/auth)
-│  └─ logout/                           # Logout page (clears session then redirects)
-├─ common/
-│  └─ auth/                             # Shared auth helpers (cookie/token utilities, guards)
-├─ components/                          # Reusable UI components & page sections
-│  ├─ dashboard/                        # Dashboard-specific components (KPI cards, charts)
-│  ├─ products/                         # Product components (forms, tables, filters)
-│  └─ sidebar/                          # Sidebar navigation & layout shell
-├─ dtos/                                # Data Transfer Objects (types + mapping)
-│  ├─ request_dtos/                     # Request DTOs (form/input validation & types)
-│  └─ response_dtos/                    # Response DTOs (API response models)
-├─ hooks/                               # Custom React hooks (data fetching, form state, etc.)
-├─ lib/                                 # General libraries (Prisma, HTTP wrapper, helpers)
-├─ pages/                               # Next.js Pages Router (used here only for API routes)
-│  └─ api/                              # Serverless API endpoints (Node/Edge)
-│      ├─ admin/                        # Admin endpoints (stats, configs)
-│      ├─ auth/                         # Auth endpoints (login, logout, session check)
-│      ├─ products/                     # Product endpoints
-│      │  ├─ import/                    # Bulk import (e.g., Excel/CSV upload & processing)
-│      │  └─ [id]/                      # Product detail/update/delete (RESTful)
-│      └─ users/                        # User endpoints (list/create/update/delete)
-├─ services/                            # Business service layer (DB/third-party integrations)
-├─ types/                               # Global TypeScript types & enums (avoid cycles)
-└─ utils                                # Utility functions (formatting, dates, constants)
+### Health Check
+`GET /api/health`
 
-Notes:
+## Demo Accounts
 
-Routing strategy: App UI uses app/ (App Router). Backend endpoints live under pages/api/ (serverless). They run side-by-side.
+| Role         | Email             | Password  |
+|--------------|------------------|-----------|
+| Admin        | admin@example.com | admin123  |
+| General User | demo@example.com  | user123   |
 
-Private area: Pages in app/(private) check auth (e.g., read a token or pass middleware) before render.
-
-DTOs & services: Components/pages depend on DTO types and the services layer instead of raw DB access to keep concerns clean.
-
-Dynamic routes: [id] folders indicate dynamic params (e.g., /products/123).
-
-Import flow: /pages/api/products/import handles uploads & batch ingestion, typically paired with a front-end upload form/drag-drop.
-
-```
-
-## 7. Getting Started
-
-### 7.1. Clone the Repository
-```bash
-git clone https://github.com/FBB2021/Dashboard.git
-cd Dashboard
-```
-
-### 7.2. Install Dependencies
-```bash
-npm install
-```
-
-### 7.3. Configure Environment Variables
-Create a `.env` file in the project root with the following values (update `DATABASE_URL` to your own RDS/MySQL instance):
-
-```env
-# Database connection (MySQL)
-DATABASE_URL="mysql://<username>:<password>@<host>:3306/dashboard"
-
-# Security
-BCRYPT_SALT_ROUNDS=10
-JWT_SECRET=supersecretkey
-
-# Seed users (initial accounts created when seeding the DB)
-SEED_ADMIN_USERNAME=admin
-SEED_ADMIN_EMAIL=admin@example.com
-SEED_ADMIN_PASSWORD=admin123
-
-SEED_USER_USERNAME=demo
-SEED_USER_EMAIL=demo@example.com
-SEED_USER_PASSWORD=user123
-
-# API Base URL (used in frontend fetch calls)
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
-```
-
-### 7.4. Initialize Database
-```bash
-# Run Prisma migrations
-npx prisma migrate dev
-
-# Seed the database with default users/roles
-npx prisma db seed
-```
-
-### 7.5. Launch Project
-```bash
-npm run dev
-```
-App runs on: <http://localhost:3000>
+> After login, users will be redirected to `/dashboard`.
 
 ---
 
-That's it.
+# Getting Started
 
-This project demonstrates a complete end-to-end solution for data import, visualisation, and management.
+## 1. Clone the Repository
 
-Thanks for stopping by.
-
-Feng Bao
+```bash
+git clone https://github.com/FBB2021/Dashboard.git
+cd Dashboard
